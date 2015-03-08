@@ -1,0 +1,12 @@
+<script>
+	$(function() {
+		$.appForms.refresh();
+	});
+</script>
+{define row-actions}
+	<p class="center block">
+		<a class="btn btn-small btn-link editable" href="{plink loadRoleForm! $row->aclRoleID}">editovat <span class="icon-edit"></span></a>
+		<span>|</span>
+		<a class="btn btn-small btn-link removable" href="{plink deleteRole! aclRoleID => $row->aclRoleID}">smazat <span class="icon-remove-circle"></span></a>
+	</p>
+{/define}

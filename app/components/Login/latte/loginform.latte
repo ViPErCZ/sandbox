@@ -1,0 +1,21 @@
+{foreach $flashes as $flash}
+	<div class="alert alert-danger">{$flash->message}</div>
+{/foreach}                         
+{form loginForm class=>"form-signin"}
+<h2 class="form-signin-heading">Login</h2>
+{input nick}
+{input pass}
+<label class="checkbox">
+	{input remember}
+</label>
+<p n:if="$googleClient || $facebookClient">
+	<a href="{$facebookClient->getLoginUrl()}" n:if="$facebookClient"><img src="{$basePath}/img/ico-facebook.gif" alt="facebook" /></a>
+	<a href="{$googleClient->createAuthUrl()}" n:if="$googleClient">
+		<img src="{$basePath}/img/gplus-32.png" alt="facebook" />
+	</a>
+</p>
+<p>
+	<a href="{plink Registration:}">registrovat se</a>
+</p>
+{input sender}
+{/form}

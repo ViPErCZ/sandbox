@@ -1,0 +1,14 @@
+<script>
+	$(function() {
+		$.appForms.refresh();
+	});
+</script>
+{define row-actions}
+	<p class="center block">
+		<a class="btn btn-small btn-link editable" href="{plink loadActionForm! $row->aclActionID}">editovat <span
+					class="icon-edit"></span></a>
+		<span>|</span>
+		<a class="btn btn-small btn-link removable" href="{plink deleteAction! aclActionID => $row->aclActionID}">smazat
+			<span class="icon-remove-circle"></span></a>
+	</p>
+{/define}

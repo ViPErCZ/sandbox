@@ -1,0 +1,19 @@
+<script>
+	/** Hlavní funkce */
+	/** ************************************ */
+	$(function() {
+		var preloader = {$basePath} + '/img/ajaxLoader.gif';
+		var form = $('#formDialog form');
+		var content = $("#home #grid");
+		var success = $("#customSuccess");
+		var error = $("#customError");
+		var addLink = $("#main-content #add").data("link");
+		var refreshLink = {plink refresh! templateName=>'contentAction'};
+		var grid = $('#main-content #grid');
+		var tabfilterData = $('#myTab .active a').text();
+		$.appForms.confirmDialogTitle = "Varování";
+		$.appForms.confirmDialogMessage = "Opravdu vymazat...?";
+		$.appForms.confirmDialogGeneratorLinkUrl = {plink generateActionRemoveUrl!};
+		$.appForms.init(preloader, form, content, success, error, addLink, refreshLink, grid, tabfilterData);
+	});
+</script>

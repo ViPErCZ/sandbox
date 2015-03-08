@@ -1,0 +1,69 @@
+#
+# SECURITY WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+#
+# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
+# http://nette.org/security-warning
+#
+parameters:
+	langs: {'cs' : 'cs_CZ.utf8', 'en' : 'en_US.utf8'}
+
+php:
+	date.timezone: Europe/Prague
+	# session.save_path: "%tempDir%/sessions"
+	# zlib.output_compression: yes
+
+
+session:
+	autoStart: smart
+	expiration: +365days
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\*Presenter
+
+#facebookConnect:
+#	appName: 'Facebook Connect for nette - Sandbox'
+#	appId: '****'
+#	secret: '****'
+#	canvasUrl: '****'
+#	scope: 'email,offline_access,publish_stream'
+
+services:
+	- App\RouterFactory
+	router: @App\RouterFactory::createRouter
+	componentFactory:
+		class: \iComponentFactory
+		factory: \ComponentFactory
+	facebookSDK: @\Illagrenan\Facebook\FacebookConnect
+	authenticator:
+		class: \Model\Authenticators\MultiAuthenticator
+		setup:
+			- addAuthenticator("db", \Model\Authenticators\DbAuthenticator(@userRespository))
+			- addAuthenticator("google", \Model\Authenticators\GoogleAuthenticator(@userManager, @googleClient, TRUE))
+			- addAuthenticator("facebook", \Model\Authenticators\FacebookAuthenticator(@userManager, @\Illagrenan\Facebook\FacebookConnect, TRUE))
+	logger: \Services\SQLLogger
+	translator:
+		class: \h4kuna\GettextLatte(%appDir%/../locale/, %langs%)
+	database: @Nette\Database\Context
+	registrator: \Model\Registrators\Basic
+	authorizator: \Services\Permission\AclPermission
+	entityManager: \slimORM\EntityManager(@database, Nette\Caching\Cache(@cacheStorage))
+	userRespository: \Model\Permission\UserRepository
+	roleRepository: \Model\Permission\RoleRepository
+	resourceRepository: \Model\Permission\ResourceRepository
+	actionRepository: \Model\Permission\ActionRepository
+	permissionRepository: \Model\Permission\PermissionRepository
+	modelRepository: \Model\Permission\ModelRepository
+	modelManager: \Model\Permission\ModelManager
+	permissionManager: \Model\Permission\PermissionManager
+	historyRepository: \Model\History\HistoryRepository
+	contactRepository: \Model\Contact\ContactRepository
+	userManager: \Model\Permission\UserManager
+#	googleClient:
+#		class: \Google_Client
+#		setup:
+#			- setApplicationName("Google Connect for nette - Sandbox")
+#			- setClientId("*******")
+#			- setClientSecret("******")
+#			- setRedirectUri("*****")
+#			- setScopes(['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'])

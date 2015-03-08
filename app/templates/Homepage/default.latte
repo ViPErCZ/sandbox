@@ -1,0 +1,27 @@
+{block content}
+{if $user->isLoggedIn()}
+{include ../navbar.latte}
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+	<div class="container">
+		<h1>Acl permissions!</h1>
+
+		<p>Aplikaci pro modelování uživatelských oprávnění. Oprávnění se modeluje pomocí akcí na určité zdroje (moduly)
+			a ty se pak mapují
+			na jednotlivé skupiny oprávnění.</p>
+
+		<p><a class="btn btn-primary btn-lg" role="button" href="{plink User:}">Přehled uživatelů &raquo;</a></p>
+	</div>
+</div>
+<hr />
+{else}
+<div class="container">
+	<div class="content">
+		<div class="row">
+			<div class="login-form">
+				{control loginForm}
+			</div>
+		</div>
+	</div>
+</div>
+{/if}

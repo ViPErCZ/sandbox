@@ -1,0 +1,56 @@
+<script>
+	/** Hlavní funkce */
+	/** ************************************ */
+	$(function () {
+		var form = $("#grid .well form");
+		var content = $("#home #grid");
+		var link = {plink refresh! templateName=>'contentResource'};
+		var preloader = {$basePath} +'/img/ajaxLoader.gif';
+		$.componentForms.init(form, content, link, preloader);
+	});
+
+</script>
+<div class='well'>
+	{form form class=>"form-horizontal"}
+		<div class="form-group">
+			{label name class=>'col-lg-2 control-label' /}
+			<div class="col-lg-10">
+				{input name class => 'form-control'}
+			</div>
+		</div>
+		<div class="form-group">
+			<fieldset class='col-lg-12'>
+				<legend>Akce modulu</legend>
+				{var $counterx = 0}
+				<div class="col-lg-10">
+					<table>
+						{foreach $actions as $key => $action}
+						{if $counterx == 0}<tr>{/if}
+						<td>
+							<div class="checkbox">
+								{$form["actions"][$key]->label}
+							</div>
+						</td>
+						<td>
+							<div class="checkbox">
+								{$form["actions"][$key]->control}
+							</div>
+						</td>
+						{if $counterx == 5}
+						{var $counterx = 0}
+					</tr>
+						{else}
+						{var $counterx += 1}
+						{/if}
+						{/foreach}
+					</table>
+				</div>
+			</fieldset>
+		</div>
+		<div class="form-group text-right">
+			<div class="col-lg-offset-2 col-lg-10">
+				{input cancel class=>'btn btn-default'} {input sender class=>'btn btn-primary'}
+			</div>
+		</div>
+	{/form}
+</div>

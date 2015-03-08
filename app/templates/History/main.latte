@@ -1,0 +1,25 @@
+<div n:if="$user->isAllowed('history', 'view')" class="container">
+	<div class="well">
+
+		<h3>Historie</h3>
+		<div class='content'>
+		</div>
+		<hr />
+		<div class='clearfix'>
+			<div class='content'>
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active"><a href="#home" data-toggle="tab">Vše</a></li>
+				</ul>
+
+				<div class="tab-content">
+					<div class="tab-pane active" id="home">
+						<div class="content panel-body" id="contact-grid">
+							{control grid}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

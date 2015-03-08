@@ -1,0 +1,19 @@
+{
+	"name": "ACL sandbox",
+	"description": "Base sandbox aplication.",
+	"homepage": "http://vipersoftware.net",
+	"type": "project",
+	"license": ["MIT"],
+	"authors": [
+		{
+			"name": "Martin Chudoba",
+			"homepage": "http://vipersoftware.net"
+		}
+	],
+	"require": {
+		"php": ">= 5.4.0",
+		"nette/nette": "~2.3.0",
+    "h4kuna/gettext-latte": "dev-master",
+    "nextras/datagrid": "~2.1.2"
+	}
+}

@@ -1,0 +1,25 @@
+<?php
+
+// Load Nette Framework
+require __DIR__ . '/../vendor/autoload.php';
+
+$configurator = new Nette\Configurator;
+
+//$configurator->setDebugMode(TRUE);  // debug mode MUST NOT be enabled on production server
+$configurator->enableDebugger(__DIR__ . '/../log');
+
+$configurator->setTempDirectory(__DIR__ . '/../temp');
+
+$configurator->createRobotLoader()
+	->addDirectory(__DIR__)
+	->addDirectory(LIBS_DIR)
+	->register();
+
+$configurator->addConfig(__DIR__ . '/config/config.neon');
+$configurator->addConfig(__DIR__ . '/config/config.local.neon');
+
+\Illagrenan\Facebook\DI\FacebookConnectExtension::register($configurator);
+
+$container = $configurator->createContainer();
+
+return $container;

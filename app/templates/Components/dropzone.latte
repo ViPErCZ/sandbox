@@ -1,0 +1,39 @@
+{block #content}
+{include ../navbar.latte}
+<div id="main-content">
+	<div class="container">
+		<div class="well">
+
+			<h3>Dropzone formulář</h3>
+			<div class='content'>
+				<div class='content clearfix'>
+					<div id="customError" class="alert alert-block alert-danger fade in hidden alert-dismissable">
+						<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
+						<p></p>
+					</div>
+					<div id="customSuccess" class="alert alert-block alert-success fade in hidden">
+						<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
+						<p></p>
+					</div>
+				</div>
+			</div>
+			<hr />
+			<div class='clearfix'>
+				<div class='content'>
+					<ul class="nav nav-tabs" id="myTab">
+						<li class="active"><a href="#home" data-toggle="tab">Vše</a></li>
+					</ul>
+
+					<div class="tab-content">
+						<div class="tab-pane active" id="home">
+							<div class="content panel-body" id="grid">
+								{control dropzone}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>

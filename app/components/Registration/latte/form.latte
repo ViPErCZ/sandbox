@@ -1,0 +1,54 @@
+{foreach $control['registrationForm']->parent->template->flashes as $flash}
+	<div class="alert alert-success {$flash->type}">{$flash->message}</div>
+{/foreach}
+{form registrationForm role => "form"}
+	<!-- Jednoduché vykreslení chyb -->
+	{if $form->hasErrors()}
+		<div n:foreach="$form->errors as $error" class="alert alert-danger">{$error}</div>
+	{/if}
+	<div class="row form-group">
+		<div class="col-xs-6">
+			{label firstname /}
+			{input firstname class => "form-control", placeholder => "Jméno"}
+		</div>
+		<div class="col-xs-6">
+			{label lastname /}
+			{input lastname class => "form-control", placeholder => "Příjmení"}
+		</div>
+	</div>
+	<div class="row form-group">
+		<div class="col-xs-12">
+			{label login /}
+			{input login class => "form-control", placeholder => "Přihlašovací email"}
+		</div>
+	</div>
+	<div class="row form-group">
+		<div class="col-xs-6">
+			{label password /}
+			{input password class => "form-control", placeholder => "Heslo"}
+		</div>
+		<div class="col-xs-6">
+			{label password2 /}
+			{input password2 class => "form-control", placeholder => "Heslo pro kontrolu"}
+		</div>
+	</div>
+	<div class="row form-group">
+		<div class="col-xs-6"></div>
+		<div class="col-xs-6"></div>
+	</div>
+	<div class="row form-group">
+		<div class="col-xs-12">
+			<ul class="nav nav-tabs"></ul>
+		</div>
+	</div>
+	<div class="row form-group">
+		<div class="col-xs-6"></div>
+		<div class="col-xs-6"></div>
+	</div>
+	<div class="row form-group col-lg-2">
+		{input sender class => "btn btn-success"}
+	</div>
+	<div class="row form-group col-xs-1">
+		<a href="{plink Homepage:}" class="btn btn-link">zpět na login stránku...</button>
+	</div>
+{/form}
