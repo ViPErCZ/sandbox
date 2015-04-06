@@ -8,18 +8,28 @@
 namespace Component\Base\WithLogged;
 
 
+use Nette\Application\Responses\JsonResponse;
 use Nette\Application\UI\Control;
+use Nette\Application\UI\Form;
 use Services\iLogger;
 use Services\Logger\iObservable;
 use Services\Logger\iObserver;
 use Nextras\Application\UI\SecuredLinksControlTrait;
+use Nette\Localization\ITranslator;
 
+/**
+ * Class BaseControl
+ * @package Component\Base\WithLogged
+ */
 abstract class BaseControl extends Control implements iObservable {
 
 	use SecuredLinksControlTrait;
 
 	/** @var  array */
 	protected $observers;
+
+	/** @var ITranslator */
+	protected $translator;
 
 	/**
 	 * @param iLogger $observer
@@ -44,17 +54,16 @@ abstract class BaseControl extends Control implements iObservable {
 		}
 	}
 
-	/** Odeslání formuláře s Errory
-	 *
-	 * @param \Nette\Application\UI\Form $form
+	/**
+	 * Odeslání formuláře s Errory
+	 * @param Form $form
 	 */
-	public function FormError(\Nette\Application\UI\Form $form)
-	{
+	public function FormError(Form $form) {
 		$json = new \stdClass();
 		$json->result = "error";
 		$json->message = implode("<br />", $form->getErrors());
 		$json->notify = implode(",", $form->getErrors());
-		$response = new \Nette\Application\Responses\JsonResponse($json);
+		$response = new JsonResponse($json);
 		$this->getPresenter()->sendResponse($response);
 	}
 } 

@@ -21,9 +21,6 @@ class Login extends BaseControl {
 	/** @var User */
 	private $user;
 
-	/** @var ITranslator */
-	private $translator;
-
 	/** @var \Google_Client */
 	private $googleClient;
 
