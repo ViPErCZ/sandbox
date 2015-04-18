@@ -13,8 +13,9 @@
 	"require": {
 		"php": ">= 5.4.0",
 		"nette/nette": "~2.3.0",
-    "h4kuna/gettext-latte": "dev-master",
-    "nextras/datagrid": "~2.1.2",
-    "slimorm/slimorm": "dev-master"
+    	"h4kuna/gettext-latte": "dev-master",
+    	"nextras/datagrid": "~2.1.2",
+    	"slimorm/slimorm": "dev-master",
+    	"kdyby/console": "~2.3.1"
 	}
 }

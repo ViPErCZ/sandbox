@@ -5,13 +5,21 @@
 # http://nette.org/security-warning
 #
 parameters:
-	langs: {'cs' : 'cs_CZ.utf8', 'en' : 'en_US.utf8'}
 
 php:
 	date.timezone: Europe/Prague
 	# session.save_path: "%tempDir%/sessions"
 	# zlib.output_compression: yes
 
+extensions:
+	gettextLatteExtension: h4kuna\Gettext\DI\GettextLatteExtension
+	console: Kdyby\Console\DI\ConsoleExtension
+
+gettextLatteExtension:
+	langs:
+		cs: cs_CZ.utf8
+#		sk: sk_SK.utf8
+#		en: en_US.utf8
 
 session:
 	autoStart: smart
@@ -42,8 +50,6 @@ services:
 			- addAuthenticator("google", \Model\Authenticators\GoogleAuthenticator(@userManager, @googleClient, TRUE))
 			- addAuthenticator("facebook", \Model\Authenticators\FacebookAuthenticator(@userManager, @\Illagrenan\Facebook\FacebookConnect, TRUE))
 	logger: \Services\SQLLogger
-	translator:
-		class: \h4kuna\GettextLatte(%appDir%/../locale/, %langs%)
 	database: @Nette\Database\Context
 	registrator: \Model\Registrators\Basic
 	authorizator: \Services\Permission\AclPermission

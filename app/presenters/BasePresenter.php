@@ -3,7 +3,7 @@
 namespace App;
 
 use GettextTranslator\Gettext;
-use h4kuna\GettextLatte;
+use h4kuna\Gettext\InjectTranslator;
 use Illagrenan\Facebook\FacebookConnect;
 use Nette;
 use Services\iLogger;
@@ -15,11 +15,10 @@ use Services\iLogger;
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
+	use InjectTranslator;
+
 	/** @var \iComponentFactory */
 	protected $componentFactory;
-
-	/** GettextLatte */
-	protected $translator;
 
 	/** @var  \Services\iLogger */
 	protected $logger;
@@ -50,13 +49,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	 */
 	public function injectComponentFactory(\iComponentFactory $componentFactory) {
 		$this->componentFactory = $componentFactory;
-	}
-
-	/** Injektuje službu
-	 * @param GettextLatte $translator
-	 */
-	public function injectTranslator(GettextLatte $translator) {
-		$this->translator = $translator;
 	}
 
 	/** Inject
