@@ -119,4 +119,14 @@ abstract class BaseRepository
 	public function select($columns) {
 		return $this->entityManager->getRepository($this->entity)->select($columns);
 	}
+	
+	/**
+	 * @param string $key
+	 * @param string|null $value
+	 * @return array
+	 * @throws \slimORM\Exceptions\RepositoryException
+	 */
+	public function fetchPairs($key, $value = null) {
+		return $this->entityManager->getRepository($this->entity)->fetchPairs($key, $value);
+	}
 } 
