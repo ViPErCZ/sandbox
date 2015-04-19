@@ -46,11 +46,12 @@ class HistoryPresenter extends BasePresenter {
 
 			foreach ($filter as $k => $v) {
 				$k = str_replace("login", "user.login", $k);
+				$k = str_replace("ip", "syslog.ip", $k);
 				$data->where($k . " LIKE ?", "%".$v."%");
 			}
 			if ($order) {
 				$order = str_replace("login", "user.login", implode(" ", $order));
-				$order = str_replace("ip", "user.ip", $order);
+				$order = str_replace("ip", "syslog.ip", $order);;
 				$data->order($order);
 			} else {
 				$data->order("timestamp DESC");
@@ -61,6 +62,7 @@ class HistoryPresenter extends BasePresenter {
 			$data = $model->read();
 			foreach ($filter as $k => $v) {
 				$k = str_replace("login", "user.login", $k);
+				$k = str_replace("ip", "syslog.ip", $k);
 				$data->where($k . " LIKE ?", "%".$v."%");
 			}
 			return $data->count('*');
