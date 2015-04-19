@@ -42,7 +42,7 @@ class HistoryPresenter extends BasePresenter {
 			return $row->$getter();
 		});
 		$grid->setDatasourceCallback(function($filter, $order, $paginator) use ($model) {
-			$data = $model->read($paginator)->select("*, user.login");
+			$data = $model->read($paginator)->select("syslog.*, user.login, user.ip AS loginIP");
 
 			foreach ($filter as $k => $v) {
 				$k = str_replace("login", "user.login", $k);
@@ -75,7 +75,7 @@ class HistoryPresenter extends BasePresenter {
 
 			// these buttons are not compulsory
 			$form->addSubmit('filter', 'Filtrovat')->getControlPrototype()->class = 'btn btn-primary';
-			$form->addSubmit('cancel', 'Storno')->getControlPrototype()->class = 'btn';
+			$form->addSubmit('cancel', 'Storno')->getControlPrototype()->class = 'btn btn-default';
 
 			return $form;
 		});
