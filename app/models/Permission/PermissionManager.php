@@ -15,11 +15,16 @@ use Nette\Diagnostics\Debugger;
 
 class PermissionManager extends BaseModel {
 
+	/** @var RoleRepository */
 	private $roleRepository;
+
+	/** @var PermissionRepository */
 	private $permissionRepository;
+
+	/** @var ResourceRepository */
 	private $resourceRepository;
 
-	/** Konstruktor
+	/**
 	 * @param Context $connection
 	 * @param RoleRepository $roleRepository
 	 * @param PermissionRepository $permissionRepository
@@ -82,7 +87,6 @@ class PermissionManager extends BaseModel {
 				$this->roleRepository->push($roleEntity)->save();
 				$resources = $this->resourceRepository->read();
 				$this->permissionRepository->read()->where("aclRoleID", $values['aclRoleID'])->getSelection()->delete();
-				Debugger::barDump($values);
 
 				foreach($resources as $resource) {
 					foreach ($values[$resource->aclResourceID] as $key => $action) {

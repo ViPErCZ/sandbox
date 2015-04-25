@@ -1,8 +1,10 @@
 <?php
 
 namespace Model\Permission;
-use Model\Base\BaseRepository;
+
+use Model\Permission\Entity\ActionEntity;
 use Nette\Utils\Paginator;
+use slimORM\AbstractRepository;
 use slimORM\Entity\Entity;
 use slimORM\EntityManager;
 
@@ -11,12 +13,12 @@ use slimORM\EntityManager;
  *
  * @author Martin Chudoba
  */
-class ActionRepository extends BaseRepository {
-	
-	/** konstanty */
+class ActionRepository extends AbstractRepository {
+
+	/** constant */
 	const ENTITY = '\Model\Permission\Entity\ActionEntity';
 
-	/** Konstruktor
+	/**
 	 * @param EntityManager $entityManager
 	 */
 	public function __construct(EntityManager $entityManager) {
