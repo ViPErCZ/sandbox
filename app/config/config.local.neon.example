@@ -1,0 +1,26 @@
+parameters:
+	database:
+		driver: mysql
+		host: localhost
+		dbname: acl
+		user: root
+		password: *****
+		charset: utf8
+		collation: utf8_czech_ci
+		
+nette:
+	database:
+		default:
+			dsn: '%database.driver%:host=%database.host%;dbname=%database.dbname%'
+			user: %database.user%
+			password: %database.password%
+		
+services:
+	googleClient:
+		class: \Google_Client
+		setup:
+			- setApplicationName("Google Connect for nette - Sandbox")
+			- setClientId("*******")
+			- setClientSecret("******")
+			- setRedirectUri("*****")
+			- setScopes(['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'])
