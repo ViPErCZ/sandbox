@@ -1,7 +1,7 @@
 {
-	"name": "ACL sandbox",
+	"name": "vipercz/sandbox",
 	"description": "Base sandbox aplication.",
-	"homepage": "http://vipersoftware.net",
+	"homepage": "https://github.com/ViPErCZ/sandbox.git",
 	"type": "project",
 	"license": ["MIT"],
 	"authors": [
@@ -13,9 +13,9 @@
 	"require": {
 		"php": ">= 5.4.0",
 		"nette/nette": "~2.3.0",
-    	"h4kuna/gettext-latte": "dev-master",
-    	"nextras/datagrid": "~2.1.2",
-    	"slimorm/slimorm": "dev-master",
+		"h4kuna/gettext-latte": "dev-master",
+ 		"nextras/datagrid": "~2.1.2",
+		"slimorm/slimorm": "~1.0",
     	"kdyby/console": "~2.3.1"
 	}
 }
