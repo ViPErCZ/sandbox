@@ -178,10 +178,10 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 
-INSERT INTO `aclAction` (`aclActionID`, `name`, `humanName`) VALUES (NULL, 'view', 'Zobrazit');
-INSERT INTO `aclAction` (`aclActionID`, `name`, `humanName`) VALUES (NULL, 'add', 'Přidávat');
-INSERT INTO `aclAction` (`aclActionID`, `name`, `humanName`) VALUES (NULL, 'edit', 'Editovat');
-INSERT INTO `aclAction` (`aclActionID`, `name`, `humanName`) VALUES (NULL, 'delete', 'Mazat');
+INSERT INTO `aclAction` (`aclActionID`, `name`, `humanName`) VALUES (1, 'view', 'Zobrazit');
+INSERT INTO `aclAction` (`aclActionID`, `name`, `humanName`) VALUES (2, 'add', 'Přidávat');
+INSERT INTO `aclAction` (`aclActionID`, `name`, `humanName`) VALUES (3, 'edit', 'Editovat');
+INSERT INTO `aclAction` (`aclActionID`, `name`, `humanName`) VALUES (4, 'delete', 'Mazat');
 
 COMMIT;
 
@@ -191,9 +191,25 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 
-INSERT INTO `aclResource` (`aclResourceID`, `name`) VALUES (NULL, 'permission');
-INSERT INTO `aclResource` (`aclResourceID`, `name`) VALUES (NULL, 'user_management');
-INSERT INTO `aclResource` (`aclResourceID`, `name`) VALUES (NULL, 'history');
+INSERT INTO `aclResource` (`aclResourceID`, `name`) VALUES (1, 'permission');
+INSERT INTO `aclResource` (`aclResourceID`, `name`) VALUES (2, 'user_management');
+INSERT INTO `aclResource` (`aclResourceID`, `name`) VALUES (3, 'history');
 
 COMMIT;
 
+-- -----------------------------------------------------
+-- Data for table `aclModel`
+-- -----------------------------------------------------
+START TRANSACTION;
+
+INSERT INTO `aclModel` (`aclModelID`, `aclResourceID`, `aclActionID`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(3, 1, 3),
+(4, 1, 4),
+(5, 2, 1),
+(6, 3, 1),
+(7, 2, 2),
+(8, 2, 3);
+
+COMMIT;
