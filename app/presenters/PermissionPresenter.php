@@ -123,26 +123,30 @@ class PermissionPresenter extends BasePresenter {
 	 */
 	public function handleDeleteRole($aclRoleID) {
 		$json = new \stdClass();
-		if (is_string($aclRoleID)) {
-			try {
-				$aclRoleID = (array) Json::decode($aclRoleID);
-				$aclRoleID = array_values($aclRoleID);
-			} catch (JsonException $e) {
-				$json->message = $e->getMessage();
-				$json->result = "error";
-				$response = new JsonResponse($json);
-				$this->getPresenter()->sendResponse($response);
+		$json->result = "error";
+
+		if ($this->user->isAllowed("permission", "delete")) {
+			if (is_string($aclRoleID)) {
+				try {
+					$aclRoleID = (array)Json::decode($aclRoleID);
+					$aclRoleID = array_values($aclRoleID);
+				} catch (JsonException $e) {
+					$json->message = $e->getMessage();
+					$json->result = "error";
+					$response = new JsonResponse($json);
+					$this->getPresenter()->sendResponse($response);
+				}
 			}
-		}
-		$result = $this->permissionManager->remove($aclRoleID);
-		if ($result === TRUE) {
-			$json->result = "success";
-		} else {
-			$json->result = "error";
-			if (strpos("Integrity constraint violation", $result) != -1) {
-				$json->message = "Skupinu stále využívá někdo z uživatelů, proto ji nebylo možné vymazat.";
+			$result = $this->permissionManager->remove($aclRoleID);
+			if ($result === TRUE) {
+				$json->result = "success";
 			} else {
-				$json->message = $result;
+				$json->result = "error";
+				if (strpos("Integrity constraint violation", $result) != -1) {
+					$json->message = "Skupinu stále využívá někdo z uživatelů, proto ji nebylo možné vymazat.";
+				} else {
+					$json->message = $result;
+				}
 			}
 		}
 		$response = new JsonResponse($json);
@@ -155,26 +159,30 @@ class PermissionPresenter extends BasePresenter {
 	 */
 	public function handleDeleteModel($aclModelID) {
 		$json = new \stdClass();
-		if (is_string($aclModelID)) {
-			try {
-				$aclModelID = (array) Json::decode($aclModelID);
-				$aclModelID = array_values($aclModelID);
-			} catch (JsonException $e) {
-				$json->message = $e->getMessage();
-				$json->result = "error";
-				$response = new JsonResponse($json);
-				$this->getPresenter()->sendResponse($response);
+		$json->result = "error";
+
+		if ($this->user->isAllowed("permission", "delete")) {
+			if (is_string($aclModelID)) {
+				try {
+					$aclModelID = (array)Json::decode($aclModelID);
+					$aclModelID = array_values($aclModelID);
+				} catch (JsonException $e) {
+					$json->message = $e->getMessage();
+					$json->result = "error";
+					$response = new JsonResponse($json);
+					$this->getPresenter()->sendResponse($response);
+				}
 			}
-		}
-		$result = $this->modelManager->remove($aclModelID);
-		if ($result === TRUE) {
-			$json->result = "success";
-		} else {
-			$json->result = "error";
-			if (strpos("Integrity constraint violation", $result) != -1) {
-				$json->message = "Model stále využívá některá z komponent, proto ji nebylo možné vymazat.";
+			$result = $this->modelManager->remove($aclModelID);
+			if ($result === TRUE) {
+				$json->result = "success";
 			} else {
-				$json->message = $result;
+				$json->result = "error";
+				if (strpos("Integrity constraint violation", $result) != -1) {
+					$json->message = "Model stále využívá některá z komponent, proto ji nebylo možné vymazat.";
+				} else {
+					$json->message = $result;
+				}
 			}
 		}
 		$response = new JsonResponse($json);
@@ -187,26 +195,30 @@ class PermissionPresenter extends BasePresenter {
 	 */
 	public function handleDeleteAction($aclActionID) {
 		$json = new \stdClass();
-		if (is_string($aclActionID)) {
-			try {
-				$aclActionID = (array) Json::decode($aclActionID);
-				$aclActionID = array_values($aclActionID);
-			} catch (JsonException $e) {
-				$json->message = $e->getMessage();
-				$json->result = "error";
-				$response = new JsonResponse($json);
-				$this->getPresenter()->sendResponse($response);
+		$json->result = "error";
+
+		if ($this->user->isAllowed("permission", "delete")) {
+			if (is_string($aclActionID)) {
+				try {
+					$aclActionID = (array)Json::decode($aclActionID);
+					$aclActionID = array_values($aclActionID);
+				} catch (JsonException $e) {
+					$json->message = $e->getMessage();
+					$json->result = "error";
+					$response = new JsonResponse($json);
+					$this->getPresenter()->sendResponse($response);
+				}
 			}
-		}
-		$result = $this->actionRepository->delete($aclActionID);
-		if ($result === TRUE) {
-			$json->result = "success";
-		} else {
-			$json->result = "error";
-			if (strpos("Integrity constraint violation", $result) != -1) {
-				$json->message = "Akci stále využívá některý z modelů, proto ji nebylo možné vymazat.";
+			$result = $this->actionRepository->delete($aclActionID);
+			if ($result === TRUE) {
+				$json->result = "success";
 			} else {
-				$json->message = $result;
+				$json->result = "error";
+				if (strpos("Integrity constraint violation", $result) != -1) {
+					$json->message = "Akci stále využívá některý z modelů, proto ji nebylo možné vymazat.";
+				} else {
+					$json->message = $result;
+				}
 			}
 		}
 		$response = new JsonResponse($json);

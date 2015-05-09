@@ -9,6 +9,7 @@ use Nette\Application\Responses\JsonResponse;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nette\Diagnostics\Debugger;
+use Nette\Security\User;
 
 /**
  * Description of ResourceForm
@@ -32,15 +33,22 @@ class ResourceForm extends Control {
 	/** @var int */
 	private $aclResourceID;
 
+	/** @var User */
+	private $user;
 
-	/** Konstruktor
+	/** messages */
+	const PERMISSION = "Na tuto operaci nemáte dostatečná oprávnění";
+
+
+	/**
 	 * @param ModelManager $modelManager
 	 * @param ResourceRepository $resourceRepository
 	 * @param ActionRepository $actionRepository
 	 * @param ModelRepository $modelRepository
+	 * @param User $user
 	 */
 	public function __construct(ModelManager $modelManager, ResourceRepository $resourceRepository,
-								ActionRepository $actionRepository, ModelRepository $modelRepository) {
+								ActionRepository $actionRepository, ModelRepository $modelRepository, User $user) {
 		parent::__construct();
 
 		$this->modelManager = $modelManager;
@@ -48,6 +56,7 @@ class ResourceForm extends Control {
 		$this->actionRepository = $actionRepository;
 		$this->modelRepository = $modelRepository;
 		$this->aclResourceID = NULL;
+		$this->user = $user;
 	}
 
 	/**
@@ -148,9 +157,17 @@ class ResourceForm extends Control {
 			$json->message = "Prosím vyberte alespoň jednu akci pro modul.";
 		} else {
 			if (!empty($values['aclResourceID'])) {
-				$result = $this->modelManager->update($values);
+				if ($this->user->isAllowed("permission", "edit")) {
+					$result = $this->modelManager->update($values);
+				} else {
+					$result = ResourceForm::PERMISSION;
+				}
 			} else {
-				$result = $this->modelManager->insert($values);
+				if ($this->user->isAllowed("permission", "add")) {
+					$result = $this->modelManager->insert($values);
+				} else {
+					$result = ResourceForm::PERMISSION;
+				}
 			}
 
 			if ($result === TRUE) {
