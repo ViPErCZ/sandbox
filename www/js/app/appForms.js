@@ -55,7 +55,7 @@ var appForms = function() {
                         });
                         if (Object.keys(selectedArr).length != 0) {
                             $("#notselectedAlert").hide();
-                            showConfirmDialog(that, JSON.stringify(selectedArr));
+                            showConfirmDialog(plugin, JSON.stringify(selectedArr));
                             $('.confirm').modal('show');
                         } else {
                             $("#notselectedAlert").removeClass('hidden').show();
