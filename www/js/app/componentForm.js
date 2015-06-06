@@ -6,7 +6,7 @@
  *
  * @author Martin Chudoba
  * !
- * @version 1.0.0
+ * @version 1.1.0
  * @returns componentForms
  */
 var componentForms = function() {
@@ -45,30 +45,32 @@ var componentForms = function() {
         });
 
         /** Submit form */
-        form.find("input[type=submit]").off("click").on("click", function(event) {
+        form.find("input[type=submit], button[type=submit]").off("click").on("click", function(event) {
             event.preventDefault();
 			if (tinyMCE) {
 				$(tinymce.get()).each(function(i, el){
 					document.getElementById(el.id).value = el.getContent();
 				});
 			}
-			form.ajaxSubmit(function(msg) {
-                if (msg.result == "success") {
-					if (tinyMCE) {
-						$(tinymce.get()).each(function(i, el){
-							el.destroy();
-						});
-					}
-                    content.html('<div class="well center loading"><img src="'+preloader+'" alt="loading..." /></div>');
-                    content.load(link, function() {
-                    	$.nette.load();
-                	});
-                	$("#customSuccess p").text('Úspěšně uloženo...');
-                	$("#customSuccess").removeClass('hidden').show();
-                	setTimeout(function(){ $("#customSuccess").alert('close') }, 1500);
-                } else if (msg.result == "error") {
-                    $("#customError p").html(msg.message);
-                    $("#customError").removeClass('hidden').show();
+            $.nette.ext({
+                success: function (payload) {
+                    if (payload.result == "success") {
+                        if (tinyMCE) {
+                            $(tinymce.get()).each(function(i, el){
+                                el.destroy();
+                            });
+                        }
+                        content.html('<div class="well center loading"><img src="'+preloader+'" alt="loading..." /></div>');
+                        content.load(link, function() {
+                            $.nette.load();
+                        });
+                        $("#customSuccess p").text('Úspěšně uloženo...');
+                        $("#customSuccess").removeClass('hidden').show();
+                        setTimeout(function(){ $("#customSuccess").alert('close') }, 1500);
+                    } else if (payload.result == "error") {
+                        $("#customError p").html(payload.message);
+                        $("#customError").removeClass('hidden').show();
+                    }
                 }
             });
         });
@@ -107,6 +109,7 @@ var componentForms = function() {
         actions(form, content, link, preloader);
 		$(".chosen-select").chosen();
 		if (tinymce) {
+			tinyMCE.editors=[]; // remove any existing references
 			tinymce.init({
 				selector:'.mce',
 				plugins: [
