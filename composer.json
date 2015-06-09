@@ -16,7 +16,7 @@
 	  "nextras/datagrid": "~2.1.2",
 	  "slimorm/slimorm": "~1.0",
 	  "kdyby/console": "~2.3.1",
+	  "kdyby/console": "~2.3.1",
 	  "markette/gopay": "~2.1.0"
-		"kdyby/console": "~2.3.1"
 	}
 }
