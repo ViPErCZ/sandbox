@@ -14,6 +14,7 @@ php:
 extensions:
 	gettextLatteExtension: h4kuna\Gettext\DI\GettextLatteExtension
 	console: Kdyby\Console\DI\ConsoleExtension
+	gopay: Markette\Gopay\Extension
 
 gettextLatteExtension:
 	langs:

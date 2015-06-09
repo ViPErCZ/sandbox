@@ -23,6 +23,9 @@
 						<li n:class="$control->name == 'Components' && $control->action == 'dropzone' ? active : ''">
 							<a href="{plink Components:Dropzone}">Dropzone</a>
 						</li>
+						<li n:class="$control->name == 'Gopay' ? active : ''">
+							<a href="{plink Gopay:default}">Gopay extension</a>
+						</li>
 					</ul>
 				</li>
 				<li n:if="$user->isAllowed('permission', 'view') || $user->isAllowed('user_management', 'view')" n:class="$control->name == 'User' || $control->name == 'Permission' ? 'active dropdown' : 'dropdown'">
