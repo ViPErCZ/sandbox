@@ -49,6 +49,7 @@ abstract class BaseControl extends Control implements iObservable {
 	 * @param $message
 	 */
 	public function notify($message) {
+		/** @var iLogger $observer */
 		foreach ($this->observers as $observer) {
 			$observer->log($message);
 		}

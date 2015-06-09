@@ -5,7 +5,7 @@
  * appForms jQuery plugin
  *
  * @author Martin Chudoba
- * @version 1.1.0
+ * @version 1.2.0
  * @returns appForms
  */
 var appForms = function() {
@@ -26,6 +26,72 @@ var appForms = function() {
 	this.confirmDialogMessage = '';
 	this.confirmDialogGeneratorLinkUrl = null;
 
+    /**
+     *
+     * @type {{buttons: Array, init: Function, action: Function, addButton: Function}}
+     */
+    var actionBar = {
+        buttons: [],
+        init: function(plugin) {
+            var addButton = {
+                selector: $("#add"),
+                click: function(event) {
+                    event.preventDefault();
+                    if(plugin) {
+                        plugin.panel.html('<div class="well center panel"><img src="' + plugin.preloader + '" alt="loading..." /></div>');
+                        plugin.panel.load(plugin.addLink);
+                    }
+                }
+            };
+            var removeButton = {
+                selector: $("#marked, #dropdown-marked"),
+                click: function(event) {
+                    event.preventDefault();
+                    if (plugin) {
+                        var selectedArr = {};
+                        plugin.grid.find('input[type="checkbox"]').each(function () {
+                            if ($(this).prop('checked'))
+                                selectedArr[$(this).data('primary')] = $(this).data('primary');
+                        });
+                        if (Object.keys(selectedArr).length != 0) {
+                            $("#notselectedAlert").hide();
+                            showConfirmDialog(plugin, JSON.stringify(selectedArr));
+                            $('.confirm').modal('show');
+                        } else {
+                            $("#notselectedAlert").removeClass('hidden').show();
+                        }
+                    }
+                }
+            };
+            this.buttons.push(addButton);
+            this.buttons.push(removeButton);
+            this.action();
+            return this;
+        },
+        action: function() {
+            $.each(this.buttons, function(index, value) {
+                value.selector.off('click').on('click', function(event) {
+                    if (value.click != undefined && typeof(value.click) == "function")
+                    value.click(event);
+                });
+            });
+        },
+        addButton: function(btn) {
+            this.buttons.push(btn);
+            btn.selector.off('click').on('click', function(event) {
+                if (btn.click != undefined && typeof(btn.click) == "function")
+                    btn.click(event);
+            });
+        },
+        getButton: function(index) {
+            if (index >= 0 && index < this.buttons.length) {
+                return this.buttons[index];
+            } else {
+                return null;
+            }
+        }
+    };
+
     /** Znovunačtení datagridu
      * ************************************ */
     var refreshContent = function(obj) {
@@ -40,6 +106,7 @@ var appForms = function() {
      * ************************************* */
     var actions = function(obj) {
         var that = obj;
+        that.getActionBar().action();
 
         /** Nastavení close u alert zpráv
          * ********************************************* */
@@ -56,38 +123,12 @@ var appForms = function() {
             that.panel.load($(this).attr('href'));
         });
 
-        /** Přidání řádku */
-        /* ********************************** */
-        $("#add").off('click').on("click", function(event) {
-            event.preventDefault();
-            that.panel.html('<div class="well center panel"><img src="' + that.preloader + '" alt="loading..." /></div>');
-            that.panel.load(that.addLink);
-        });
-
         /** Odebrání řádku
          * ********************************************* */
         that.grid.find(".removable").off("click").on("click", function(event) {
             event.preventDefault();
 			showConfirmDialogWithLink(that, $(this).attr('href'));
         });
-
-        /** Odebrání označených řádků
-         * ********************************************* */
-        $("#marked, #dropdown-marked").off("click").on("click", function(event) {
-            event.preventDefault();
-            var selectedArr = {};
-            that.grid.find('input[type="checkbox"]').each(function() {
-                if ($(this).prop('checked'))
-                selectedArr[$(this).data('primary')] = $(this).data('primary');
-            });
-            if (Object.keys(selectedArr).length != 0) {
-                $("#notselectedAlert").hide();
-				showConfirmDialog(that, JSON.stringify(selectedArr));
-				$('.confirm').modal('show');
-            } else {
-                $("#notselectedAlert").removeClass('hidden').show();
-            }
-         });
 
         /** Submit form */
         /* ********************************************** */
@@ -200,11 +241,16 @@ var appForms = function() {
 		});
 	};
 
-	/**
-	 *
-	 * @param content
-	 */
-	initConfirmDialog = function (content, plugin) {
+    this.getActionBar = function() {
+        return actionBar;
+    };
+
+    /**
+     *
+     * @param content
+     * @param plugin
+     */
+	var initConfirmDialog = function (content, plugin) {
 		var dialog = '<div class="modal fade confirm"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
 		dialog += '<h4 class="modal-title">' + plugin.confirmDialogTitle + '</h4> </div>';
 		dialog += '<div class="modal-body"> <p class="message">' + plugin.confirmDialogMessage + '</p> </div>';
@@ -242,6 +288,7 @@ var appForms = function() {
 
         $(".alert").alert();
         $.nette.load();
+        this.getActionBar().init(this);
         actions(this);
 		initConfirmDialog(this.grid, this);
 

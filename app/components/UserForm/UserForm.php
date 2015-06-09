@@ -33,7 +33,10 @@ class UserForm extends BaseControl
 	/** @var User */
 	private $user;
 
-	/** Konstruktor
+	/** messages */
+	const PERMISSION = "Na tuto operaci nemáte dostatečná oprávnění";
+
+	/**
 	 * @param UserRepository $userRepository
 	 * @param RoleRepository $roleRepository
 	 * @param User $user
@@ -50,61 +53,69 @@ class UserForm extends BaseControl
 	 *
 	 * @param int $rsuserID
 	 */
-	public function setUserID($rsuserID)
-	{
+	public function setUserID($rsuserID) {
 		$this->rsuserID = $rsuserID;
 	}
 
 	/** Render
 	 *
 	 */
-	public function render()
-	{
+	public function render() {
 		$template = $this->template;
 		$template->setFile(dirname(__FILE__) . "/latte/form.latte");
 
 		$template->render();
 	}
 
-	/** Odeslání formuláře
-	 *
-	 * @param \Nette\Application\UI\Form $form
+	/**
+	 * @param Form $form
 	 */
-	public function Submit(Form $form)
-	{
+	public function Submit(Form $form) {
 		$json = new \stdClass();
 		$json->result = "success";
 		$values = $form->getValues();
+		$result = false;
 
 		if (!empty($values['userID'])) {
 			$userEntity = $this->userRepository->get($values['userID']);
 			if ($userEntity) {
-				$userEntity->setLogin($values['login']);
-				if (!empty($values['password1'])) {
-					$userEntity->setPassword($values['password1']);
-				}
-				if ($userEntity->getLogin() !== "root" && $userEntity->getUserID() !== $this->user->getId()) {
-					$userEntity->setActive($values['active'])
-						->setAclRoleID($values['role']);
-				}
-				try {
-					$result = $this->userRepository->save();
-				} catch (PDOException $e) {
-					$result = $e->getMessage();
+				if ($this->user->isAllowed("user_management", "edit")) {
+					$userEntity->setLogin($values['login']);
+					if (!empty($values['password1'])) {
+						$userEntity->setPassword($values['password1']);
+					}
+					if ($userEntity->getLogin() !== "root" && $userEntity->getUserID() !== $this->user->getId()) {
+						$userEntity->setActive($values['active']);
+
+						if ($userEntity->getRole()->getAclRoleID() != $this->user->getIdentity()->data['aclRoleID']) {
+							$userEntity->setAclRoleID($values['role']);
+						}
+					}
+					try {
+						$result = $this->userRepository->save();
+					} catch (\PDOException $e) {
+						$result = $e->getMessage();
+					}
+				} else {
+					$result = UserForm::PERMISSION;
 				}
 			}
 		} else {
-			$userEntity = new UserEntity();
-			$userEntity->setLogin($values['login'])
-				->setPassword($values['password1'])
-				->setActive($values['active'])
-				->setAclRoleID($values['role']);
-			$result = $this->userRepository->push($userEntity)->save();
-			//$result = $this->userRepository->save(TRUE, $userEntity);
-			if ($result instanceof UserEntity || $result === TRUE)
-				$result = TRUE;
-			else
-				$result = FALSE;
+			if ($this->user->isAllowed("user_management", "add")) {
+				$userEntity = new UserEntity();
+				$userEntity->setLogin($values['login'])
+					->setPassword($values['password1'])
+					->setActive($values['active'])
+					->setAclRoleID($values['role']);
+				$result = $this->userRepository->push($userEntity)->save();
+				//$result = $this->userRepository->save(TRUE, $userEntity);
+				if ($result instanceof UserEntity || $result === TRUE)
+					$result = TRUE;
+				else
+					$result = FALSE;
+			} else {
+				$result = UserForm::PERMISSION;
+			}
 		}
 
 		if ($result === TRUE) {
@@ -129,7 +140,11 @@ class UserForm extends BaseControl
 			->setRequired("Prosím zadejte přihlašovací jméno.");
 		$form->addPassword("password1", "Heslo:")->setAttribute("class", "form-control")->setAttribute("autocomplete", "off");
 		$form->addPassword("password2", "Heslo pro kontrolu:")->setAttribute("class", "form-control")->setAttribute("autocomplete", "off");
-		$roles = $this->roleRepository->read()->where("name != ?", "root")->fetchPairs("aclRoleID", "name");
+		$roles = $this->roleRepository->read()->where("name != ?", "root");
+		if (!$this->user->isInRole("root")) {
+			$roles->where("name NOT(?)", $this->user->getRoles());
+		}
+		$roles = $roles->fetchPairs("aclRoleID", "name");
 		$form->addSelect("role", "Oprávnění:", $roles)->setAttribute("class", "form-control");
 		$form->addCheckbox("active", "Aktivní");
 		$form->addButton("cancel", "Storno")->setHtmlId("cancel");
@@ -147,7 +162,7 @@ class UserForm extends BaseControl
 				if ($userEntity->getUserID() == $this->user->getId()) {
 					$form['role']->setDisabled();
 				}
-				if ($userEntity->getLogin() != "root") {
+				if ($userEntity->getLogin() != "root" && $userEntity->getUserID() !== $this->user->getId()) {
 					$form['role']->setValue($userEntity->aclRoleID);
 				}
 			}

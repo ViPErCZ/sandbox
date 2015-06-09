@@ -6,6 +6,7 @@ use Model\Permission\ActionRepository;
 use Model\Permission\Entity\ActionEntity;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Application\UI\Form;
+use Nette\Security\User;
 
 class ActionForm extends BaseControl {
 
@@ -15,21 +16,28 @@ class ActionForm extends BaseControl {
     /**@var int */
     private $aclActionID;
 
+    /** @var User */
+    private $user;
+
+    /** messages */
+    const PERMISSION = "Na tuto operaci nemáte dostatečná oprávnění";
+
     /**
      * @param ActionRepository $actionRepository
+     * @param User $user
      */
-    public function __construct(ActionRepository $actionRepository) {
+    public function __construct(ActionRepository $actionRepository, User $user) {
         parent::__construct();
 
         $this->actionRepository = $actionRepository;
         $this->aclActionID = NULL;
+        $this->user = $user;
     }
 
     /**
      * @param int $aclActionID
      */
-    public function setAclActionID($aclActionID)
-    {
+    public function setAclActionID($aclActionID) {
         $this->aclActionID = $aclActionID;
     }
 
@@ -53,32 +61,40 @@ class ActionForm extends BaseControl {
         $values = $form->getValues();
 
         if (!empty($values['aclActionID'])) {
-            $actionEntity = $this->actionRepository->get($values['aclActionID']);
-            if ($actionEntity) {
-                $actionEntity->setName($values['name']);
-                $actionEntity->setHumanName($values['humanName']);
-                try {
-                    $result = $this->actionRepository->save();
-                } catch (PDOException $e) {
-                    $result = $e->getMessage();
-                }
-            } else {
-                $result = FALSE;
-            }
-        } else {
-            $actionEntity = new ActionEntity();
-            $actionEntity->setName($values['name']);
-            $actionEntity->setHumanName($values['humanName']);
-
-            try {
-				$ent = $this->actionRepository->push($actionEntity)->save();
-                if ($ent instanceof ActionEntity || $ent === TRUE) {
-                    $result = TRUE;
+            if ($this->user->isAllowed("permission", "edit")) {
+                $actionEntity = $this->actionRepository->get($values['aclActionID']);
+                if ($actionEntity) {
+                    $actionEntity->setName($values['name']);
+                    $actionEntity->setHumanName($values['humanName']);
+                    try {
+                        $result = $this->actionRepository->save();
+                    } catch (\PDOException $e) {
+                        $result = $e->getMessage();
+                    }
                 } else {
                     $result = FALSE;
                 }
-            } catch (PDOException $e) {
-                $result = $e->getMessage();
+            } else {
+                $result = ActionForm::PERMISSION;
+            }
+        } else {
+            if ($this->user->isAllowed("permission", "add")) {
+                $actionEntity = new ActionEntity();
+                $actionEntity->setName($values['name']);
+                $actionEntity->setHumanName($values['humanName']);
+
+                try {
+                    $ent = $this->actionRepository->push($actionEntity)->save();
+                    if ($ent instanceof ActionEntity || $ent === TRUE) {
+                        $result = TRUE;
+                    } else {
+                        $result = FALSE;
+                    }
+                } catch (\PDOException $e) {
+                    $result = $e->getMessage();
+                }
+            } else {
+                $result = ActionForm::PERMISSION;
             }
         }
 

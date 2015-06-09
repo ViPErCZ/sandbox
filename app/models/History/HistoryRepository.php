@@ -7,18 +7,18 @@
 
 namespace Model\History;
 
-
-use Model\Base\BaseRepository;
+use Model\History\Entity\SyslogEntity;
 use Nette\Utils\Paginator;
+use slimORM\AbstractRepository;
 use slimORM\Entity\Entity;
 use slimORM\EntityManager;
 
-class HistoryRepository extends BaseRepository {
+class HistoryRepository extends AbstractRepository {
 
-	/** konstanty */
+	/** constant */
 	const ENTITY = '\Model\History\Entity\SyslogEntity';
 
-	/** Konstruktor
+	/**
 	 * @param EntityManager $entityManager
 	 */
 	public function __construct(EntityManager $entityManager) {

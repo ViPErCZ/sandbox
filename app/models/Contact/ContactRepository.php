@@ -7,18 +7,18 @@
 
 namespace Model\Contact;
 
-
-use Model\Base\BaseRepository;
+use Model\Contact\Entity\ContactEntity;
 use Nette\Utils\Paginator;
+use slimORM\AbstractRepository;
 use slimORM\Entity\Entity;
 use slimORM\EntityManager;
 
-class ContactRepository extends BaseRepository {
+class ContactRepository extends AbstractRepository {
 
-	/** konstanty */
+	/** constant */
 	const ENTITY = '\Model\Contact\Entity\ContactEntity';
 
-	/** Konstruktor
+	/**
 	 * @param EntityManager $entityManager
 	 */
 	public function __construct(EntityManager $entityManager) {
@@ -42,7 +42,7 @@ class ContactRepository extends BaseRepository {
 	}
 
 	/**
-	 * @return ActionEntity|TRUE
+	 * @return ContactEntity|TRUE
 	 */
 	public function save() {
 		return parent::save();

@@ -16,15 +16,15 @@ use Nette\Object;
 
 class UserManager extends Object {
 
-	/** @var \Model\Registrators\iRegistrator */
+	/** @var iRegistrator */
 	private $registrator;
 
 	/** @var \Model\Contact\ContactRepository */
 	private $contactRepository;
 
-	/** Construct
-	 * @param \Model\Contact\ContactRepository $contactRepository
-	 * @param \Model\Registrators\iRegistrator $registrator
+	/**
+	 * @param ContactRepository $contactRepository
+	 * @param iRegistrator $registrator
 	 */
 	public function __construct(ContactRepository $contactRepository, iRegistrator $registrator) {
 		$this->registrator = $registrator;

@@ -11,6 +11,7 @@ use Nette\Application\Responses\JsonResponse;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nette\Diagnostics\Debugger;
+use Nette\Security\User;
 
 /**
  * Description of RoleForm
@@ -40,18 +41,25 @@ class RoleForm extends Control {
 	/** @var int */
 	private $aclRoleID;
 
+	/** @var User */
+	private $user;
 
-	/** Konstruktor
+	/** messages */
+	const PERMISSION = "Na tuto operaci nemáte dostatečná oprávnění";
+
+
+	/**
 	 * @param RoleRepository $roleRepository
 	 * @param ModelRepository $modelRepository
 	 * @param PermissionManager $permissionManager
 	 * @param PermissionRepository $permissionRepository
 	 * @param ResourceRepository $resourceRepository
 	 * @param ActionRepository $actionRepository
+	 * @param User $user
 	 */
 	public function __construct(RoleRepository $roleRepository, ModelRepository $modelRepository, PermissionManager $permissionManager,
 								PermissionRepository $permissionRepository, ResourceRepository $resourceRepository,
-								ActionRepository $actionRepository) {
+								ActionRepository $actionRepository, User $user) {
 		parent::__construct();
 		
 		$this->roleRepository = $roleRepository;
@@ -60,6 +68,7 @@ class RoleForm extends Control {
 		$this->actionRepository = $actionRepository;
 		$this->permissionManager = $permissionManager;
 		$this->permissionRepository = $permissionRepository;
+		$this->user = $user;
 		$this->aclRoleID = NULL;
 	}
 
@@ -162,9 +171,17 @@ class RoleForm extends Control {
 		$values = $form->getValues();
 
 		if (!empty($values['aclRoleID'])) {
-			$result = $this->permissionManager->update($values);
+			if ($this->user->isAllowed("permission", "edit")) {
+				$result = $this->permissionManager->update($values);
+			} else {
+				$result = RoleForm::PERMISSION;
+			}
 		} else {
-			$result = $this->permissionManager->insert($values);
+			if ($this->user->isAllowed("permission", "add")) {
+				$result = $this->permissionManager->insert($values);
+			} else {
+				$result = RoleForm::PERMISSION;
+			}
 		}
 		/*Debugger::dump($values);
 		exit();*/
