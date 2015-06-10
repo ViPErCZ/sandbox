@@ -61,6 +61,30 @@ class GopayPresenter extends BasePresenter {
 	}
 
 	/**
+	 * @param $paymentSessionId
+	 * @param $targetGoId
+	 * @param $orderNumber
+	 * @param $encryptedSignature
+	 * @throws \Nette\Application\AbortException
+	 */
+	public function actionNotification($paymentSessionId, $targetGoId, $orderNumber, $encryptedSignature) {
+		$payment = $this->gopay->restorePayment(array(
+			'sum'         => 100,
+			'variable'    => 1500100615,
+			'specific'    => 0,
+			'productName' => "Test",
+		), array(
+			'paymentSessionId'   => $paymentSessionId,
+			'targetGoId'         => $targetGoId,
+			'orderNumber'        => $orderNumber,
+			'encryptedSignature' => $encryptedSignature,
+		));
+
+		$this->logger->log("Notifikace o zaplaceni: " . $payment->isPaid());
+		$this->terminate();
+	}
+
+	/**
 	 * @return Form
 	 */
 	protected function createComponentForm() {
