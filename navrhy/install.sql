@@ -11,7 +11,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Table `acl`.`aclRole`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `acl`.`aclRole` (
+CREATE TABLE IF NOT EXISTS `aclRole` (
   `aclRoleID` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`aclRoleID`),
