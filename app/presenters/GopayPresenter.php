@@ -68,19 +68,23 @@ class GopayPresenter extends BasePresenter {
 	 * @throws \Nette\Application\AbortException
 	 */
 	public function actionNotification($paymentSessionId, $targetGoId, $orderNumber, $encryptedSignature) {
-		$payment = $this->gopay->restorePayment(array(
-			'sum'         => 100,
-			'variable'    => 1500100615,
-			'specific'    => 0,
-			'productName' => "Test",
-		), array(
-			'paymentSessionId'   => $paymentSessionId,
-			'targetGoId'         => $targetGoId,
-			'orderNumber'        => $orderNumber,
-			'encryptedSignature' => $encryptedSignature,
-		));
+		try {
+			$payment = $this->gopay->restorePayment(array(
+				'sum' => 100,
+				'variable' => 1500100615,
+				'specific' => 0,
+				'productName' => "Test",
+			), array(
+				'paymentSessionId' => $paymentSessionId,
+				'targetGoId' => $targetGoId,
+				'orderNumber' => $orderNumber,
+				'encryptedSignature' => $encryptedSignature,
+			));
 
-		$this->logger->log("Notifikace o zaplaceni: " . $payment->isPaid());
+			$this->logger->log("Notifikace o zaplaceni: " . $payment->isPaid());
+		} catch(\Exception $e) {
+			$this->logger->log("Notifikace o zaplaceni: " . $e->getMessage());
+		}
 		$this->terminate();
 	}
 

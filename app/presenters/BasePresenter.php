@@ -65,7 +65,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		parent::startup();
 
 		if (!$this->user->isLoggedIn() &&
-			(!$this->isLinkCurrent("Homepage:default") && !$this->isLinkCurrent("Registration:default"))
+			(!$this->isLinkCurrent("Homepage:default") && !$this->isLinkCurrent("Registration:default") && !$this->isLinkCurrent("Gopay:notification"))
 			&& PHP_SAPI != 'cli') {
 			$this->redirect("Homepage:");
 		} else if ($this->user->isLoggedIn()) {
