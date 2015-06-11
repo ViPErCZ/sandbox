@@ -123,7 +123,7 @@ class GopayPresenter extends BasePresenter {
 
 		$order = array(
 			'sum'         => rand(10, 2000),      // placená částka
-			'variable'    => intval(date("Y") . date("m") . date("d") . date("H") . date("m") . date("s")), // variabilní symbol
+			'variable'    => intval(date("Y") . date("m") . date("d") . date("H") . date("i") . date("s")), // variabilní symbol
 			'specific'    => 0, // specifický symbol
 			'productName' => "Test",  // název produktu (popis účelu platby)
 			'customer' => array(
