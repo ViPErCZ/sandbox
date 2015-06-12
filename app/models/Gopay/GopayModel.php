@@ -27,13 +27,14 @@ class GopayModel extends BaseModel {
 	 * @return bool|mixed|\Nette\Database\Table\IRow
 	 */
 	public function getOrder($number) {
-		return $this->database->table("gopay")->where("number", $number)->fetch();
+		return $this->database->table("gopay")->where("paymentSessionID", $number)->fetch();
 	}
 
 	/**
 	 * @param $number
 	 */
 	public function paied($number) {
-		$this->database->table("gopay")->where("number", $number)->update(array("paid" => true));
+		$this->database->table("gopay")->where("paymentSessionID", $number)->update(array("paid" => true));
 	}
+
 }

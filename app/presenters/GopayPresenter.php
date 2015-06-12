@@ -46,7 +46,7 @@ class GopayPresenter extends BasePresenter {
 	 */
 	public function renderSuccess($paymentSessionId, $targetGoId, $orderNumber, $encryptedSignature) {
 
-		$order = $this->gopayModel->getOrder($orderNumber);
+		$order = $this->gopayModel->getOrder($paymentSessionId);
 
 		if ($order instanceof IRow) {
 			$payment = $this->gopay->restorePayment(array(
@@ -77,7 +77,7 @@ class GopayPresenter extends BasePresenter {
 	 */
 	public function actionNotification($paymentSessionId, $targetGoId, $orderNumber, $encryptedSignature) {
 		try {
-			$order = $this->gopayModel->getOrder($orderNumber);
+			$order = $this->gopayModel->getOrder($paymentSessionId);
 
 			if ($order instanceof IRow) {
 				$payment = $this->gopay->restorePayment(array(
@@ -92,10 +92,13 @@ class GopayPresenter extends BasePresenter {
 					'encryptedSignature' => $encryptedSignature,
 				));
 
-				$this->logger->log("Notifikace o zaplaceni: " . $payment->isPaid());
-				if ($payment->isPaid()) {
-					$this->gopayModel->paied($orderNumber);
+				$paied = $payment->isPaid();
+				$this->logger->log("Notifikace o zaplaceni: " . $paied);
+				if ($paied) {
+					$this->gopayModel->paied($paymentSessionId);
 				}
+			} else {
+				$this->logger->log("Notifikace o zaplaceni: nepodařilo se najít objednávku " . $paymentSessionId);
 			}
 		} catch(\Exception $e) {
 			$this->logger->log("Notifikace o zaplaceni: " . $e->getMessage());
@@ -123,7 +126,7 @@ class GopayPresenter extends BasePresenter {
 
 		$order = array(
 			'sum'         => rand(10, 2000),      // placená částka
-			'variable'    => intval(date("Y") . date("m") . date("d") . date("H") . date("i") . date("s")), // variabilní symbol
+			'variable'    => date("Y") . date("m") . date("d") . date("H") . date("i") . date("s"), // variabilní symbol
 			'specific'    => 0, // specifický symbol
 			'productName' => "Test",  // název produktu (popis účelu platby)
 			'customer' => array(
@@ -144,10 +147,10 @@ class GopayPresenter extends BasePresenter {
 		try {
 			$storeIdCallback = function ($paymentId) use ($model, $order) {
 				$record = array(
-					"number" 	=> $paymentId,
-					"variable"	=> $order['variable'],
-					"sum"		=> $order['sum'],
-					"name"		=> "Test",
+					"paymentSessionID" 	=> $paymentId,
+					"variable"			=> $order['variable'],
+					"sum"				=> $order['sum'],
+					"name"				=> "Test",
 				);
 				$this->gopayModel->insert($record);
 			};
