@@ -63,6 +63,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	 */
 	public function startup() {
 		parent::startup();
+		$this->translator->setLanguage("cs");
 
 		if (!$this->user->isLoggedIn() &&
 			(!$this->isLinkCurrent("Homepage:default") && !$this->isLinkCurrent("Registration:default") && !$this->isLinkCurrent("Gopay:notification"))
