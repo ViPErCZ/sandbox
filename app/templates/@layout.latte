@@ -3,22 +3,37 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-	<meta name="description" content="Organizer app">
+	<meta name="description" content="Sandbox app">
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
 
-	<title>ACL app</title>
+	<title>Sandbox app</title>
 
-	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/bootstrap.min.css" type="text/css">
+	<link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,300,700,600italic,400italic,300italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/bootstrap3.nextras.datagrid.css" type="text/css">
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/chosen.css" type="text/css">
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/dropzone.css" type="text/css">
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/main.css" type="text/css">
 	{* <link rel="stylesheet" media="print" href="{$basePath}/css/print.css" type="text/css"> *}
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+	<!-- Theme style -->
+	<link rel="stylesheet" href="{$basePath}/dist/css/AdminLTE.min.css">
+	<!-- AdminLTE Skins. Choose a skin from the css/skins
+		 folder instead of downloading all of them to reduce the load. -->
+	<link rel="stylesheet" href="{$basePath}/dist/css/skins/_all-skins.min.css">
+
 	<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
 
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 	<script type="text/javascript" src="{$basePath}/js/nette/netteForms.js"></script>
-	<script type="text/javascript" src="{$basePath}/js/bootstrap/bootstrap.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="{$basePath}/js/nette/jquery.ajaxform.js"></script>
 	<script type="text/javascript" src="{$basePath}/js/nette/nette.ajax.js"></script>
 	<script type="text/javascript" src="{$basePath}/js/app/json2.js"></script>
@@ -28,6 +43,9 @@
 	<script type="text/javascript" src="{$basePath}/js/choosen/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="{$basePath}/js/tinymce/tinymce.min.js"></script>
 	<script type="text/javascript" src="{$basePath}/js/dropzone/dropzone.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="{$basePath}/dist/js/app.min.js"></script>
+
 	<script>
 		$(function() {
 			$.nette.init();
@@ -52,7 +70,64 @@
 	{block head}{/block}
 </head>
 
-<body>
+<body n:class="$user->isLoggedIn() ? 'hold-transition skin-blue sidebar-mini':'hold-transition login-page'">
+
+<div n:class="$user->isLoggedIn() ? wrapper : ''">
+
+	<header class="main-header" n:if="$user->isLoggedIn()">
+		<!-- Logo -->
+		<a href="{$baseUrl}" class="logo">
+			<!-- mini logo for sidebar mini 50x50 pixels -->
+			<span class="logo-mini"><b>S</b>B</span>
+			<!-- logo for regular state and mobile devices -->
+			<span class="logo-lg"><b>Admin</b> Sandbox app</span>
+		</a>
+		<!-- Header Navbar: style can be found in header.less -->
+		<nav class="navbar navbar-static-top" role="navigation">
+			<!-- Sidebar toggle button-->
+			<a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+				<span class="sr-only">Toggle navigation</span>
+			</a>
+			<div class="navbar-custom-menu">
+				<ul class="nav navbar-nav">
+
+					<!-- User Account: style can be found in dropdown.less -->
+					<li class="dropdown user user-menu">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<img src="{$basePath}/dist/img/user.jpg" class="user-image" alt="User Image">
+							<span class="hidden-xs">{$user->getIdentity()->data['login']}</span>
+						</a>
+						<ul class="dropdown-menu">
+							<!-- User image -->
+							<li class="user-header">
+								<img src="{$basePath}/dist/img/user.jpg" class="img-circle" alt="User Image">
+								<p>
+									Naposledny přihlášen
+									<small>{$user->getIdentity()->data['lastLogged']->format("d.m.Y H:i")}</small>
+								</p>
+							</li>
+							<!-- Menu Footer-->
+							<li class="user-footer">
+								<div class="pull-left">
+									<a n:href="User:" class="btn btn-default btn-flat">Profil</a>
+								</div>
+								<div class="pull-right">
+									<a n:href="Homepage:logout" class="btn btn-default btn-flat">Odhlásit</a>
+								</div>
+							</li>
+						</ul>
+					</li>
+					<!-- Control Sidebar Toggle Button -->
+					<!--<li>
+						<a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+					</li>-->
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	{include navbar.latte}
 	{include #content}
-</body>
+</div>
+
 </html>
