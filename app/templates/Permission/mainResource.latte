@@ -1,45 +1,58 @@
-<div class="container">
-	<div class="well">
+<!-- Content Header (Page header) -->
+<section class="content-header">
+	<h1>
+		Moduly
+		<!-- <small>Control panel</small> -->
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="{$baseUrl}"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li><a href="{plink Permission:resource}">Nastavení</a></li>
+		<li class="active">Moduly</li>
+	</ol>
+</section>
 
-		<h3>Moduly</h3>
-		<div class='content'>
-			<div class='content clearfix'>
-				<div class="btn-toolbar">
-					<div class="btn-group">
-						<button id="add" data-link="{link loadResourceForm!}" class='btn btn-success'>Přidat</button>
-					</div>
-					<div class="btn-group">
-						<button class="btn btn-danger" id="marked">Odebrat</button>
-						<button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu">
-							<li><a tabindex="-1" href="#" id="dropdown-marked">Označené</a></li>
-							<!-- <li><a tabindex="-1" href="#" id="all">Všechny</a></li> -->
-						</ul>
-					</div>
+<!-- Main content -->
+<section class="content">
+
+	<div class="row">
+
+		<div class="col-lg-12">
+
+			<div class="btn-toolbar">
+				<div class="btn-group">
+					<button id="add" data-link="{link loadResourceForm!}" class='btn btn-success'>Přidat</button>
 				</div>
-				<br />
-				<div id="notselectedAlert" class="alert alert-block alert-danger fade in hidden">
-					<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-					<h4 class="alert-heading">Nevybrali jste žádný řádek</h4>
-					<p>Vyberte prosím řádky, které chcete vymazat zaškrtnutím příslušného řádku a poté stiskněte tlačítko "Odebrat" znovu.</p>
-				</div>
-				<div id="customError" class="alert alert-block alert-danger fade in hidden alert-dismissable">
-					<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-					<p></p>
-				</div>
-				<div id="customSuccess" class="alert alert-block alert-success fade in hidden">
-					<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-					<p></p>
+				<div class="btn-group">
+					<button class="btn btn-danger" id="marked">Odebrat</button>
+					<button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li><a tabindex="-1" href="#" id="dropdown-marked">Označené</a></li>
+						<!-- <li><a tabindex="-1" href="#" id="all">Všechny</a></li> -->
+					</ul>
 				</div>
 			</div>
-		</div>
-		<hr />
-		<div class='clearfix'>
-			<div class='content'>
+
+			<div id="notselectedAlert" class="alert alert-block alert-danger fade in hidden">
+				<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
+				<h4 class="alert-heading">Nevybrali jste žádný řádek</h4>
+				<p>Vyberte prosím řádky, které chcete vymazat zaškrtnutím příslušného řádku a poté stiskněte tlačítko "Odebrat" znovu.</p>
+			</div>
+			<div id="customError" class="alert alert-block alert-danger fade in hidden alert-dismissable">
+				<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
+				<p></p>
+			</div>
+			<div id="customSuccess" class="alert alert-block alert-success fade in hidden">
+				<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
+				<p></p>
+			</div>
+
+			<hr />
+			<div class='clearfix'>
+
 				<ul class="nav nav-tabs" id="myTab">
-					<li class="active"><a href="#home" data-toggle="tab">Vše</a></li>					
+					<li class="active"><a href="#home" data-toggle="tab">Vše</a></li>
 				</ul>
 
 				<div class="tab-content">
@@ -49,24 +62,10 @@
 						</div>
 					</div>
 				</div>
+
 			</div>
+
 		</div>
+	</div>
 
-	</div>
-</div>
-
-{* 
-<!-- Confirm Modal -->
-<div id="confirmDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel">Vymazat kontakt(y)</h3>
-	</div>
-	<div class="modal-body">
-		<p>Opravdu chcete vymazat kontakt?</p>
-	</div>
-	<div class="modal-footer">
-		<button id="closeConfirm" class="btn" data-dismiss="modal" aria-hidden="true" data-type="close">Storno</button>
-		<button id="confirm" class="btn btn-primary">Vymazat</button>
-	</div>
-</div> *}
+</section>

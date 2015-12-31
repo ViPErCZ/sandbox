@@ -1,5 +1,4 @@
 {block content}
-{include ../navbar.latte}
-<div id="main-content" n:if="$user->isAllowed('user_management', 'view')">
+<div class="content-wrapper" id="main-content" n:if="$user->isAllowed('user_management', 'view')">
 	{include main.latte}
 </div>

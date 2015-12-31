@@ -5,10 +5,10 @@
 </script>
 {define row-actions}
 	<p class="center block">
-		<a class="btn btn-small btn-link editable" href="{plink loadActionForm! $row->aclActionID}">editovat <span
-					class="icon-edit"></span></a>
+		<a title="editovat" class="btn btn-small btn-link editable" href="{plink loadActionForm! $row->aclActionID}"><span
+					class="glyphicon glyphicon-pencil"></span></a>
 		<span>|</span>
-		<a class="btn btn-small btn-link removable" href="{plink deleteAction! aclActionID => $row->aclActionID}">smazat
-			<span class="icon-remove-circle"></span></a>
+		<a title="smazat" class="btn btn-small btn-link removable" href="{plink deleteAction! actionID => $row->aclActionID}">
+			<span class="glyphicon glyphicon-remove-circle"></span></a>
 	</p>
 {/define}

@@ -191,17 +191,17 @@ class PermissionPresenter extends BasePresenter {
 
 	/**
 	 * @secured
-	 * @param string $aclActionID
+	 * @param $actionID
 	 */
-	public function handleDeleteAction($aclActionID) {
+	public function handleDeleteAction($actionID) {
 		$json = new \stdClass();
 		$json->result = "error";
 
 		if ($this->user->isAllowed("permission", "delete")) {
-			if (is_string($aclActionID)) {
+			if (is_string($actionID)) {
 				try {
-					$aclActionID = (array)Json::decode($aclActionID);
-					$aclActionID = array_values($aclActionID);
+					$actionID = (array)Json::decode($actionID);
+					$actionID = array_values($actionID);
 				} catch (JsonException $e) {
 					$json->message = $e->getMessage();
 					$json->result = "error";
@@ -209,7 +209,7 @@ class PermissionPresenter extends BasePresenter {
 					$this->getPresenter()->sendResponse($response);
 				}
 			}
-			$result = $this->actionRepository->delete($aclActionID);
+			$result = $this->actionRepository->delete($actionID);
 			if ($result === TRUE) {
 				$json->result = "success";
 			} else {

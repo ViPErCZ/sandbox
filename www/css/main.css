@@ -74,3 +74,9 @@ html, body {
 	border-left-width: 5px;
 	border-radius: 3px;
 }
+.checkbox {
+	min-width: 20px;
+}
+.alert {
+	margin-top: 15px;
+}

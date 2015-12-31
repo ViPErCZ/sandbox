@@ -5,8 +5,8 @@
 </script>
 {define row-actions}
 <p class="center block">
-	<a class="btn btn-small btn-link editable" href="{plink loadForm! $row->userID}" n:if="$user->isAllowed('user_management', 'edit')">editovat <span class="icon-edit"></span></a>
+	<a title="editovat" class="btn btn-small btn-link editable" href="{plink loadForm! $row->userID}" n:if="$user->isAllowed('user_management', 'edit')"><span class="glyphicon glyphicon-pencil"></span></a>
 	<span n:if="$user->isAllowed('user_management', 'edit')">|</span>
-	<a class="btn btn-small btn-link removable" href="{plink delete! $row->userID}" n:if="$user->isAllowed('user_management', 'edit')">smazat <span class="icon-remove-circle"></span></a>
+	<a title="smazat" class="btn btn-small btn-link removable" href="{plink delete! $row->userID}" n:if="$user->isAllowed('user_management', 'edit')"><span class="glyphicon glyphicon-remove-circle"></span></a>
 </p>
 {/define}

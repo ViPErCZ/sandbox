@@ -3,7 +3,7 @@
 
 {block navbar}
 <!-- Left side column. contains the logo and sidebar -->
-<aside class="main-sidebar">
+<aside class="main-sidebar" n:if="$user->isLoggedIn()">
 	<!-- sidebar: style can be found in sidebar.less -->
 	<section class="sidebar">
 		<!-- Sidebar user panel -->
@@ -34,7 +34,7 @@
 					<i class="fa fa-dashboard"></i> <span>Dashboard</span>
 				</a>
 			</li>
-			<li n:if="$user->isAllowed('permission', 'view') || $user->isAllowed('user_management', 'view')" n:class="$control->name == 'User' || $control->name == 'Permission' || $control->name == 'RobotSetting' || $control->name == 'CreditSetting' ? 'active treeview' : 'treeview'">
+			<li n:if="$user->isAllowed('permission', 'view') || $user->isAllowed('user_management', 'view')" n:class="$control->name == 'User' || $control->name == 'Permission' ? 'active treeview' : 'treeview'">
 				<a href="#">
 					<i class="fa fa-gears"></i> <span>Nastavení</span>
 					<i class="fa fa-angle-left pull-right"></i>
