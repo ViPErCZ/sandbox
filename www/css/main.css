@@ -1,9 +1,6 @@
 html, body {
 	background-color: #eee;
 }
-body {
-	padding-top: 40px; 
-}
 .form-signin {
   max-width: 330px;
   padding: 15px;
@@ -66,4 +63,14 @@ body {
 }
 .filters .col-actions {
 	text-align: center;
+}
+.bs-callout-info {
+	border: 1px solid #e8e7e7;
+	border-left-color: #5bc0de !important;
+}
+.bs-callout {
+	padding: 20px;
+	margin: 20px 0;
+	border-left-width: 5px;
+	border-radius: 3px;
 }
