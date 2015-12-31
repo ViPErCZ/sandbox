@@ -52,7 +52,8 @@ var componentForms = function() {
 					document.getElementById(el.id).value = el.getContent();
 				});
 			}
-            $.nette.ext({
+            $.nette.ext('ajax', false);
+            $.nette.ext('ajax', {
                 success: function (payload) {
                     if (payload.result == "success") {
                         if (tinyMCE) {
@@ -66,10 +67,14 @@ var componentForms = function() {
                         });
                         $("#customSuccess p").text('Úspěšně uloženo...');
                         $("#customSuccess").removeClass('hidden').show();
-                        setTimeout(function(){ $("#customSuccess").alert('close') }, 1500);
+                        setTimeout(function(){ $("#customSuccess").addClass('hidden') }, 1500);
                     } else if (payload.result == "error") {
                         $("#customError p").html(payload.message);
                         $("#customError").removeClass('hidden').show();
+						$('#customError').off('close.bs.alert').on('close.bs.alert', function () {
+							$("#customError").addClass('hidden');
+							return false;
+						})
                     }
                 }
             });
@@ -97,11 +102,8 @@ var componentForms = function() {
         this.link = link;
         this.preloader = preloader;
 
+        $.nette.load();
         form.find('input[type=text]:first').focus();
-        form.on("submit", function(e) {
-            e.preventDefault();
-            form.find('input[type=submit]').trigger("click");
-        });
         form.find("input[type='checkbox']").each(function() {
             if ($(this).prop("checked"))
                 $(this).closest("label").css("font-weight", "bold");
@@ -109,16 +111,18 @@ var componentForms = function() {
         actions(form, content, link, preloader);
 		$(".chosen-select").chosen();
 		if (tinymce) {
-			tinyMCE.editors=[]; // remove any existing references
+            tinyMCE.editors=[]; // remove any existing references
 			tinymce.init({
 				selector:'.mce',
+                language : 'cs',
+        		toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | macros",
 				plugins: [
-					"advlist autolink lists link image charmap print preview anchor",
+					"fullpage, advlist autolink lists link image charmap print preview anchor",
 					"searchreplace visualblocks code fullscreen",
-					"insertdatetime media table contextmenu paste"
+					"insertdatetime media table contextmenu paste macros"
 				]
 			});
 		}
 	}
-}
+};
 $.componentForms = new ($.extend(componentForms, $.componentForms ? $.componentForms : {}));

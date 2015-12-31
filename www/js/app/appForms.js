@@ -5,7 +5,7 @@
  * appForms jQuery plugin
  *
  * @author Martin Chudoba
- * @version 1.2.0
+ * @version 1.3.0
  * @returns appForms
  */
 var appForms = function() {
@@ -228,9 +228,15 @@ var appForms = function() {
 						that.customSuccess.removeClass('hidden').show();
 						refreshContent(plugin);
 						setTimeout(function(){ that.customSuccess.alert('close') }, 1500);
-					} else {
+					} else if (msg.result == "error") {
 						that.customError.find('p').text(msg.message);
 						that.customError.removeClass('hidden').show();
+					} else if (msg.snippets != undefined) {
+						for(var k in msg.snippets) {
+							$("#" + k).html(msg.snippets[k]);
+							$.nette.load();
+							that.refresh();
+						}
 					}
 				});
 			},
