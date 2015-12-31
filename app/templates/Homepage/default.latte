@@ -1,27 +1,91 @@
 {block content}
 {if $user->isLoggedIn()}
 {include ../navbar.latte}
-<!-- Main jumbotron for a primary marketing message or call to action -->
-<div class="jumbotron">
-	<div class="container">
-		<h1>Acl permissions!</h1>
 
-		<p>Aplikaci pro modelování uživatelských oprávnění. Oprávnění se modeluje pomocí akcí na určité zdroje (moduly)
-			a ty se pak mapují
-			na jednotlivé skupiny oprávnění.</p>
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
 
-		<p><a class="btn btn-primary btn-lg" role="button" href="{plink User:}">Přehled uživatelů &raquo;</a></p>
-	</div>
-</div>
-<hr />
-{else}
-<div class="container">
-	<div class="content">
+	<!-- Content Header (Page header) -->
+	<section class="content-header">
+		<h1>
+			Dashboard
+			<small>Control panel</small>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a href="{$baseUrl}"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li class="active">Dashboard</li>
+		</ol>
+	</section>
+
+	<!-- Main content -->
+	<section class="content">
+
+		<!-- Small boxes (Stat box) -->
 		<div class="row">
-			<div class="login-form">
-				{control loginForm}
+			<div class="col-lg-3 col-xs-6">
+				<!-- small box -->
+				<div class="small-box bg-aqua">
+					<div class="inner">
+						<h3>100</h3>
+						<p>Box1</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-email"></i>
+					</div>
+					<a n:href="Homepage:" class="small-box-footer">více <i class="fa fa-arrow-circle-right"></i></a>
+				</div>
+			</div><!-- ./col -->
+			<div class="col-lg-3 col-xs-6">
+				<!-- small box -->
+				<div class="small-box bg-green">
+					<div class="inner">
+						<h3>1000</h3>
+						<p>Box2</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-ios-people"></i>
+					</div>
+					<a n:href="Homepage:" class="small-box-footer">více <i class="fa fa-arrow-circle-right"></i></a>
+				</div>
+			</div><!-- ./col -->
+			<div class="col-lg-3 col-xs-6">
+				<!-- small box -->
+				<div class="small-box bg-yellow">
+					<div class="inner">
+						<h3>10</h3>
+						<p>Box3</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-speakerphone"></i>
+					</div>
+					<a n:href="Homepage:" class="small-box-footer">více <i class="fa fa-arrow-circle-right"></i></a>
+				</div>
+			</div><!-- ./col -->
+			<div class="col-lg-3 col-xs-6">
+				<!-- small box -->
+				<div class="small-box bg-red">
+					<div class="inner">
+						<h3>1</h3>
+						<p>Box4</p>
+					</div>
+					<div class="icon">
+						<i class="ion ion-pie-graph"></i>
+					</div>
+					<a n:href="Homepage:" class="small-box-footer">více <i class="fa fa-arrow-circle-right"></i></a>
+				</div>
+			</div><!-- ./col -->
+		</div><!-- /.row -->
+
+	</section>
+
+{else}
+	<div class="login-box">
+		<div class="content">
+			<div class="row">
+				<div class="login-form">
+					{control loginForm}
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 {/if}

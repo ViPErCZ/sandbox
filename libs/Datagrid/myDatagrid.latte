@@ -5,11 +5,16 @@
  * @link       https://github.com/nextras
  * @author     Jan Skrasek
  *}
-<div class="grid" data-grid-name="{$control->getUniqueId()}">
+<div class="box">
+	<!--<div class="box-header">
+		<h3 class="box-title">Responsive Hover Table</h3>
+	</div>-->
+
+<div class="grid box-body table-responsive no-padding" data-grid-name="{$control->getUniqueId()}">
 	{snippet rows}
 
 	{define table-open-tag}
-		<table class="table table-bordered table-condensed table-striped">
+		<table class="table table-bordered table-hover">
 	{/define}
 	{define table-close-tag}
 		</table>
@@ -138,13 +143,14 @@
 	{/define}
 
 	{define pagination}
-		<ul class="pagination">
+		<div class="box-footer clearfix">
+		<ul class="pagination pagination-sm no-margin pull-right">
 			{if $paginator->isFirst()}
-				<li class="disabled"><a>« {$control->translate(First)}</a></li>
-				<li class="disabled"><a>« {$control->translate(Previous)}</a></li>
+				<li class="disabled"><a>« {_'First'}</a></li>
+				<li class="disabled"><a>« {_'Previous'}</a></li>
 			{else}
-				<li><a href="{link paginate!, 'page' => 1}" class="ajax">« {$control->translate(First)}</a></li>
-				<li><a href="{link paginate!, 'page' => $paginator->page - 1}" class="ajax">« {$control->translate(Previous)}</a></li>
+				<li><a href="{link paginate!, 'page' => 1}" class="ajax">« {_'First'}</a></li>
+				<li><a href="{link paginate!, 'page' => $paginator->page - 1}" class="ajax">« {_'Previous'}</a></li>
 			{/if}
 
 			<li class="active">
@@ -152,13 +158,14 @@
 			</li>
 
 			{if $paginator->isLast()}
-				<li class="disabled"><a>{$control->translate(Next)} »</a></li>
-				<li class="disabled"><a>{$control->translate(Last)} »</a></li>
+				<li class="disabled"><a>{_'Next'} »</a></li>
+				<li class="disabled"><a>{_'Last'} »</a></li>
 			{else}
-				<li><a href="{link paginate!, 'page' => $paginator->page + 1}" class="ajax">{$control->translate(Next)} »</a></li>
-				<li><a href="{link paginate!, 'page' => $paginator->pageCount}" class="ajax">{$control->translate(Last)} »</a></li>
+				<li><a href="{link paginate!, 'page' => $paginator->page + 1}" class="ajax">{_'Next'} »</a></li>
+				<li><a href="{link paginate!, 'page' => $paginator->pageCount}" class="ajax">{_'Last'} »</a></li>
 			{/if}
 		</ul>
+		</div>
 	{/define}
 
 	{foreach $cellsTemplates as $cellsTemplate}
@@ -192,17 +199,12 @@
 			{var $_dynSnippets = iterator_to_array($_dynSnippets)}
 		{/if}
 		</tbody>
-		<tfoot>
-		{if isset($paginator)}
-			<tr>
-				{var hasCheckBoxColumn = $showCheckboxes ? 1 : 0}
-				<th colspan="{=count($columns) + $template->hasActionsColumn + $hasCheckBoxColumn}">
-					{include #pagination}
-				</th>
-			</tr>
-		{/if}
-		</tfoot>
+
 		{include #table-close-tag}
 	{/form}
+
+	{include #pagination}
 	{/snippet}
+
+</div>
 </div>

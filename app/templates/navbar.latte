@@ -1,58 +1,68 @@
 <!-- NAVBAR
 ================================================== -->
-<!-- Fixed navbar -->
-<div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
-        <div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="{plink Homepage:}">Acl permission</a>
-        </div>
-        <div class="navbar-collapse collapse">
-			<ul class="nav navbar-nav">
-				<li n:class="$control->name == 'Homepage' ? active : ''"><a href="{plink Homepage:}">Home</a></li>
-				<li n:class="$control->name == 'Components' ? 'active dropdown' : 'dropdown'">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Komponenty <b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li n:class="$control->name == 'Components' && $control->action == 'tinymce' ? active : ''">
-							<a href="{plink Components:Tinymce}">TinyMCE</a>
-						</li>
-						<li n:class="$control->name == 'Components' && $control->action == 'dropzone' ? active : ''">
-							<a href="{plink Components:Dropzone}">Dropzone</a>
-						</li>
-						<li n:class="$control->name == 'Gopay' ? active : ''">
-							<a href="{plink Gopay:default}">Gopay extension</a>
-						</li>
-					</ul>
-				</li>
-				<li n:if="$user->isAllowed('permission', 'view') || $user->isAllowed('user_management', 'view')" n:class="$control->name == 'User' || $control->name == 'Permission' ? 'active dropdown' : 'dropdown'">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Oprávnění <b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li n:if="$user->isAllowed('permission', 'view')" class="dropdown-header">Definice</li>
-						<li n:if="$user->isAllowed('permission', 'view')" n:class="$control->name == 'Permission' && $control->action == 'group' ? active : ''">
-							<a href="{plink Permission:Group}">Skupiny</a>
-						</li>
-						<li n:if="$user->isInRole('root')" n:class="$control->name == 'Permission' && $control->action == 'resource' ? active : ''">
-							<a href="{plink Permission:Resource}">Moduly</a>
-						</li>
-						<li n:if="$user->isInRole('root')" n:class="$control->name == 'Permission' && $control->action == 'action' ? active : ''">
-							<a href="{plink Permission:Action}">Akce</a>
-						</li>
-						<li n:if="$user->isAllowed('permission', 'view')" class="divider"></li>
-						<li class="dropdown-header">Uživatelé</li>
-						<li n:if="$user->isAllowed('user_management', 'view')" n:class="$control->name == 'User' && $control->action == 'default' ? active : ''">
-							<a href="{plink User:}">Přehled</a>
-						</li>
-					</ul>
-				</li>
-				<li n:if="$user->isAllowed('history', 'view')" n:class="$control->name == 'History' ? active : ''"><a href="{plink History:}">Historie</a></li>
-			</ul>
-			<form class="navbar-form navbar-right">
-				<a href="{plink Homepage:logout}" class="btn btn-success">Odhlásit</a>
-			</form>
-        </div><!--/.navbar-collapse -->
-	</div>
-</div>
+
+{block navbar}
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="main-sidebar">
+	<!-- sidebar: style can be found in sidebar.less -->
+	<section class="sidebar">
+		<!-- Sidebar user panel -->
+		<div class="user-panel">
+			<div class="pull-left image">
+				<img src="{$basePath}/dist/img/user.jpg" class="img-circle" alt="User Image">
+			</div>
+			<div class="pull-left info">
+				<p>{$user->getIdentity()->data['login']}</p>
+				<a><i class="fa fa-circle text-success"></i> Online</a>
+			</div>
+		</div>
+		<!-- search form -->
+		<!--<form action="#" method="get" class="sidebar-form">
+			<div class="input-group">
+				<input type="text" name="q" class="form-control" placeholder="Search...">
+              <span class="input-group-btn">
+                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i></button>
+              </span>
+			</div>
+		</form>-->
+		<!-- /.search form -->
+		<!-- sidebar menu: : style can be found in sidebar.less -->
+		<ul class="sidebar-menu">
+			<li class="header">HLAVNÍ NAVIGACE</li>
+			<li n:class="$control->name == 'Homepage' ? active : ''">
+				<a href="{plink Homepage:}">
+					<i class="fa fa-dashboard"></i> <span>Dashboard</span>
+				</a>
+			</li>
+			<li n:if="$user->isAllowed('permission', 'view') || $user->isAllowed('user_management', 'view')" n:class="$control->name == 'User' || $control->name == 'Permission' || $control->name == 'RobotSetting' || $control->name == 'CreditSetting' ? 'active treeview' : 'treeview'">
+				<a href="#">
+					<i class="fa fa-gears"></i> <span>Nastavení</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li n:if="$user->isAllowed('permission', 'view')" n:class="$control->name == 'Permission' ? 'active':''">
+						<a href="#"><i class="fa fa-circle-o"></i> Oprávnění <i class="fa fa-angle-left pull-right"></i></a>
+						<ul class="treeview-menu">
+							<li n:class="$control->name == 'Permission' && $control->action == 'group' ? active : ''"><a href="{plink Permission:Group}"><i class="fa fa-circle-o"></i> Skupiny</a></li>
+							<li n:if="$user->isInRole('root')" n:class="$control->name == 'Permission' && $control->action == 'resource' ? active : ''"><a href="{plink Permission:Resource}"><i class="fa fa-circle-o"></i> Moduly</a></li>
+							<li n:if="$user->isInRole('root')" n:class="$control->name == 'Permission' && $control->action == 'action' ? active : ''"><a href="{plink Permission:Action}"><i class="fa fa-circle-o"></i> Akce</a></li>
+						</ul>
+					</li>
+					<li n:if="$user->isAllowed('user_management', 'view')" n:class="$control->name == 'User' && $control->action == 'default' ? active : ''"><a href="{plink User:}"><i class="fa fa-circle-o"></i> Uživatelé</a></li>
+				</ul>
+			</li>
+			<li n:if="$user->isAllowed('history', 'view')" n:class="$control->name == 'History' ? 'treeview active' : 'treeview'">
+				<a n:href="History:">
+					<i class="fa fa-table"></i> <span>Historie</span>
+				</a>
+			</li>
+
+			<!--<li class="header">LABELS</li>
+			<li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
+			<li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
+			<li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>-->
+		</ul>
+	</section>
+	<!-- /.sidebar -->
+</aside>
+{/block}
