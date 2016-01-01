@@ -8,13 +8,16 @@
 
 namespace Component\Dropzone;
 
-
 use Component\Base\BaseForm;
 use Nette\Application\Responses\JsonResponse;
 use \Nette\Application\UI\Form as NetteForm;
 use Nette\Diagnostics\Debugger;
 use Nette\Http\FileUpload;
 
+/**
+ * Class Form
+ * @package Component\Dropzone
+ */
 class Form extends BaseForm {
 
 	/**
@@ -48,9 +51,11 @@ class Form extends BaseForm {
 
 		if ($values['file'] instanceof FileUpload) {
 			$values['file']->move(APP_DIR . "/../" . $values['file']->getName());
-			Debugger::log('presunuto');
-		} else {
-			Debugger::log($values['file']);
+		}
+
+		if (!is_file(APP_DIR . "/../" . $values['file']->getName())) {
+			$json->result = "error";
+			$json->message = "File not found.";
 		}
 
 		$response = new JsonResponse($json);

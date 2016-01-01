@@ -88,14 +88,15 @@ var componentForms = function() {
                 $(this).closest("td").find("label").css("font-weight", "normal");
             }
         });
-    }
+    };
 
-    /**
-     * Init plugin
-     * @param form
-     * @param content
-     * @param link
-     */
+	/**
+	 * Init plugin
+	 * @param form
+	 * @param content
+	 * @param link
+	 * @param preloader
+	 */
     this.init = function(form, content, link, preloader) {
         this.form = form;
         this.content = content;
@@ -119,7 +120,7 @@ var componentForms = function() {
 				plugins: [
 					"fullpage, advlist autolink lists link image charmap print preview anchor",
 					"searchreplace visualblocks code fullscreen",
-					"insertdatetime media table contextmenu paste macros"
+					"insertdatetime media table contextmenu paste"
 				]
 			});
 		}

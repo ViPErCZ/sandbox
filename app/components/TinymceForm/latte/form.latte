@@ -1,6 +1,6 @@
 <script>
 	$(function() {
-		var form = $("#grid .well form");
+		var form = $("#home #grid .well form");
 		var content = $("#home #grid");
 		var link = {link refresh! templateName=>'content'};
 		var preloader = {$basePath} + '/img/ajaxLoader.gif';
@@ -8,10 +8,10 @@
 	});
 </script>
 <div class='well'>
-	{form form class=>"form-horizontal"}
+	{form form class=>"ajax form-horizontal"}
 		<div class="form-group">
-			{label area class=>'col-lg-2 control-label' /}
-			<div class="col-lg-10">
+			{label area class=>'col-lg-1 control-label' /}
+			<div class="col-lg-11">
 				{input area class=>'form-control mce'}
 			</div>
 		</div>

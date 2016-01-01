@@ -34,6 +34,16 @@
 					<i class="fa fa-dashboard"></i> <span>Dashboard</span>
 				</a>
 			</li>
+			<li n:class="$control->name == 'Components' ? 'active treeview' : 'treeview'">
+				<a href="#">
+					<i class="fa fa-desktop"></i> <span>Komponenty</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li n:class="$control->action == 'tinymce' ? active : ''"><a href="{plink Components:tinymce}"><i class="fa fa-circle-o"></i> TinyMCE</a></li>
+					<li n:class="$control->action == 'dropzone' ? active : ''"><a href="{plink Components:dropzone}"><i class="fa fa-circle-o"></i> DropZone</a></li>
+				</ul>
+			</li>
 			<li n:if="$user->isAllowed('permission', 'view') || $user->isAllowed('user_management', 'view')" n:class="$control->name == 'User' || $control->name == 'Permission' ? 'active treeview' : 'treeview'">
 				<a href="#">
 					<i class="fa fa-gears"></i> <span>Nastavení</span>
