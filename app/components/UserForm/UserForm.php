@@ -15,8 +15,7 @@ use Nette\Security\User;
  *
  * @author Martin Chudoba
  */
-class UserForm extends BaseControl
-{
+class UserForm extends BaseControl {
 
 	/**
 	 * @persistent
@@ -41,8 +40,7 @@ class UserForm extends BaseControl
 	 * @param RoleRepository $roleRepository
 	 * @param User $user
 	 */
-	public function __construct(UserRepository $userRepository, RoleRepository $roleRepository, User $user)
-	{
+	public function __construct(UserRepository $userRepository, RoleRepository $roleRepository, User $user) {
 		parent::__construct();
 		$this->userRepository = $userRepository;
 		$this->roleRepository = $roleRepository;
@@ -107,12 +105,17 @@ class UserForm extends BaseControl
 					->setPassword($values['password1'])
 					->setActive($values['active'])
 					->setAclRoleID($values['role']);
-				$result = $this->userRepository->push($userEntity)->save();
-				//$result = $this->userRepository->save(TRUE, $userEntity);
-				if ($result instanceof UserEntity || $result === TRUE)
+				try {
+					$result = $this->userRepository->push($userEntity)->save();
+				} catch (\PDOException $e) {
+					$result = $e->getMessage();
+					if (preg_match("/Duplicate entry/", $result)) {
+						$result = "Nick <strong>" . $values['login'] . "</strong> již existuje. Zvolte prosím jiný login.";
+					}
+				}
+				if ($result instanceof UserEntity || $result === TRUE) {
 					$result = TRUE;
-				else
-					$result = FALSE;
+				}
 			} else {
 				$result = UserForm::PERMISSION;
 			}

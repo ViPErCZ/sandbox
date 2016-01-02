@@ -1,2 +1,6 @@
 {include jsGroup.latte}
-{control grid}
+{if $state == 0}
+	{control grid}
+{else}
+	{control roleForm}
+{/if}

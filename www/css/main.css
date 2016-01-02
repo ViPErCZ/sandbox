@@ -80,3 +80,9 @@ html, body {
 .alert {
 	margin-top: 15px;
 }
+.alert > div > p, .alert > div > ul {
+	margin-bottom: 0;
+}
+.success > div > p, .success > div > ul {
+	margin-bottom: 0;
+}

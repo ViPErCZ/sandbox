@@ -20,33 +20,14 @@
 
 			<div class="btn-toolbar">
 				<div class="btn-group">
-					<button data-link="{link loadForm!}" id="add" class='btn btn-success' n:if="$user->isAllowed('user_management', 'add')">Přidat</button>
+					<a n:href="loadForm!" id="add" class='ajax btn btn-success' n:if="$user->isAllowed('user_management', 'add')">Přidat</a>
 				</div>
 				<div class="btn-group">
-					<button data-link="{link remove!}" class="btn btn-danger" id="marked" n:if="$user->isAllowed('user_management', 'edit')">Odebrat</button>
-					<!-- <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu">
-						<li><a tabindex="-1" href="#" id="dropdown-marked">Označené</a></li>
-						<li><a tabindex="-1" href="#" id="all">Všechny</a></li>
-					</ul> -->
+					<a n:href="remove!" class="btn btn-danger" id="marked" n:if="$user->isAllowed('user_management', 'edit')">Odebrat</a>
 				</div>
 			</div>
 
-			<div id="notselectedAlert" class="alert alert-block alert-danger fade in hidden">
-				<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-				<h4 class="alert-heading">Nevybrali jste žádný řádek</h4>
-				<p>Vyberte prosím řádky, které chcete vymazat zaškrtnutím příslušného řádku a poté stiskněte tlačítko "Odebrat" znovu.</p>
-			</div>
-			<div id="customError" class="alert alert-block alert-danger fade in hidden alert-dismissable">
-				<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-				<p></p>
-			</div>
-			<div id="customSuccess" class="alert alert-block alert-success fade in hidden">
-				<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-				<p></p>
-			</div>
+			{control notification}
 
 			<hr />
 			<div class='clearfix'>
@@ -57,8 +38,10 @@
 
 					<div class="tab-content">
 						<div class="tab-pane active panel" id="home">
-							<div class="content panel-body" id="grid">
+							<div class="content panel-body" id="grid" data-link="{link refresh!}">
+								<span n:snippet="content">
 								{include content.latte}
+								</span>
 							</div>
 						</div>
 					</div>

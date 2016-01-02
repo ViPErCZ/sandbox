@@ -1,0 +1,21 @@
+<div class="alert alert-block alert-danger fade in hidden notSelectedAlert">
+	<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
+	<h4 class="alert-heading">Nevybrali jste žádný řádek</h4>
+	<p>Vyberte prosím řádky, které chcete vymazat zaškrtnutím příslušného řádku a poté stiskněte tlačítko "Odebrat" znovu.</p>
+</div>
+<div class="alert alert-block alert-danger fade in hidden alert-dismissable customError">
+	<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
+	{snippet error}
+		<ul n:foreach="$errors as $message">
+			<li>{$message}</li>
+		</ul>
+	{/snippet}
+</div>
+<div class="alert alert-block alert-success fade in hidden customSuccess">
+	<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
+	{snippet success}
+		<ul n:foreach="$success as $message">
+			<li>{$message}</li>
+		</ul>
+	{/snippet}
+</div>

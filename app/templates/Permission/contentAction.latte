@@ -1,2 +1,6 @@
 {include jsAction.latte}
-{control gridAction}
+{if $state == 0}
+	{control gridAction}
+{else}
+	{control actionForm}
+{/if}

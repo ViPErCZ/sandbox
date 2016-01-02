@@ -1,4 +1,6 @@
 {block content}
 <div class="content-wrapper" id="main-content" n:if="$user->isAllowed('user_management', 'view')">
+	{snippetArea wrapper}
 	{include main.latte}
+	{/snippetArea}
 </div>

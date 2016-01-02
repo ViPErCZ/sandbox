@@ -10,14 +10,7 @@
 
 				<h3>TinyMCE formulář</h3>
 
-				<div id="customError" class="alert alert-block alert-danger fade in hidden alert-dismissable">
-					<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-					<p></p>
-				</div>
-				<div id="customSuccess" class="alert alert-block alert-success fade in hidden">
-					<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-					<p></p>
-				</div>
+				{control notification}
 
 				<hr/>
 				<div class='clearfix'>
@@ -28,7 +21,7 @@
 
 					<div class="tab-content">
 						<div class="tab-pane active" id="home">
-							<div class="content panel-body" id="grid">
+							<div class="content panel-body" id="grid" data-link="{plink Components:tinymce}">
 								{control tinyMceForm}
 							</div>
 						</div>

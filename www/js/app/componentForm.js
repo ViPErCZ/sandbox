@@ -6,23 +6,20 @@
  *
  * @author Martin Chudoba
  * !
- * @version 1.1.0
+ * @version 2.0.0
  * @returns componentForms
  */
 var componentForms = function() {
     var form;
     var content;
     var link;
-    var preloader;
+    var loader;
 
-    /**
-     * Actions
-     * @param form
-     * @param content
-     * @param link
-     * @param preloader
-     */
-    var actions = function(form, content, link, preloader) {
+	/**
+	 *
+	 */
+	var actions = function() {
+		var that = this;
 
 		/** Checkbox bolder */
 		form.find("input[type='checkbox']").each(function() {
@@ -38,71 +35,88 @@ var componentForms = function() {
         /** Cancel */
         form.find("#cancel").off("click").on("click", function(event) {
             event.preventDefault();
-            content.html('<div class="well center loading"><img src="'+preloader+'" alt="loading..." /></div>');
-            content.load(link, function() {
-                $.nette.load();
-            });
+			$(".customError").alert('close');
+			var xhr = snippetCallback(that, link, this, event);
+			if (xhr) {
+				xhr.success(function() {
+					var bar = $.appForms.getActionBar();
+					if (bar) {
+						bar.enablePanel();
+					}
+				});
+			}
         });
 
         /** Submit form */
         form.find("input[type=submit], button[type=submit]").off("click").on("click", function(event) {
             event.preventDefault();
+			$(".customError").alert('close');
 			if (tinyMCE) {
 				$(tinymce.get()).each(function(i, el){
 					document.getElementById(el.id).value = el.getContent();
 				});
 			}
-            $.nette.ext('ajax', false);
-            $.nette.ext('ajax', {
-                success: function (payload) {
-                    if (payload.result == "success") {
-                        if (tinyMCE) {
-                            $(tinymce.get()).each(function(i, el){
-                                el.destroy();
-                            });
-                        }
-                        content.html('<div class="well center loading"><img src="'+preloader+'" alt="loading..." /></div>');
-                        content.load(link, function() {
-                            $.nette.load();
-                        });
-                        $("#customSuccess p").text('Úspěšně uloženo...');
-                        $("#customSuccess").removeClass('hidden').show();
-                        setTimeout(function(){ $("#customSuccess").addClass('hidden') }, 1500);
-                    } else if (payload.result == "error") {
-                        $("#customError p").html(payload.message);
-                        $("#customError").removeClass('hidden').show();
-						$('#customError').off('close.bs.alert').on('close.bs.alert', function () {
-							$("#customError").addClass('hidden');
-							return false;
-						})
-                    }
-                }
-            });
-        });
 
-        /** Nastavení strong u labelu aktivniho checkboxu */
-        form.find(".checkbox input[type='checkbox']").off('change').on("change", function(event) {
-            if ($(this).prop("checked")) {
-                $(this).closest("td").find("label").css("font-weight", "bold");
-            } else {
-                $(this).closest("td").find("label").css("font-weight", "normal");
-            }
+			var xhr = $.nette.ajax({url: form.attr('action')}, this, event);
+			if (xhr) {
+				xhr.success(function(payload) {
+					if (payload.result == "success") {
+						if (tinyMCE) {
+							$(tinymce.get()).each(function(i, el){
+								el.destroy();
+							});
+						}
+						var xhr = snippetCallback(that, link, form.find("#cancel"), event, {message: 'Úspěšně uloženo...'});
+						if (xhr) {
+							xhr.success(function() {
+								$(".customSuccess:first").removeClass('hidden').show();
+								setTimeout(function(){ $(".customSuccess:first").addClass('hidden') }, 1500);
+								var bar = $.appForms.getActionBar();
+								if (bar) {
+									bar.enablePanel();
+								}
+							});
+						}
+					} else if (payload.result == "error") {
+						$(".customError:first div:first").html(payload.message);
+						$(".customError:first").removeClass('hidden').show();
+					}
+				});
+			}
         });
     };
 
 	/**
-	 * Init plugin
-	 * @param form
-	 * @param content
+	 *
+	 * @param plugin
 	 * @param link
+	 * @param ui
+	 * @param e
+	 * @param data
+	 * @returns {jqXHR|null}
+	 */
+	var snippetCallback = function(plugin, link, ui, e, data) {
+		content.find("span:first").html('<div class="well center"><img src="' + loader + '" alt="loading..." /></div>');
+		return $.nette.ajax({url: link, data: data }, ui, e);
+	};
+
+	/**
+	 * Init plugin
+	 * @param ui
+	 * @param grid
 	 * @param preloader
 	 */
-    this.init = function(form, content, link, preloader) {
-        this.form = form;
-        this.content = content;
-        this.link = link;
-        this.preloader = preloader;
+    this.init = function(ui, grid, preloader) {
+        form = ui;
+        content = grid;
+        link = content.data('link');
+        loader = preloader;
 
+		$(".alert").alert();
+		$('.customError').off('close.bs.alert').on('close.bs.alert', function () {
+			$(".customError:first").addClass('hidden');
+			return false;
+		});
         $.nette.load();
         form.find('input[type=text]:first').focus();
         form.find("input[type='checkbox']").each(function() {

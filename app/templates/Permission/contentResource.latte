@@ -1,2 +1,6 @@
 {include jsResource.latte}
-{control gridResource}
+{if $state == 0}
+	{control gridResource}
+{else}
+	{control resourceForm}
+{/if}

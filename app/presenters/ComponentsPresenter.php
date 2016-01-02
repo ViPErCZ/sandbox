@@ -8,9 +8,13 @@
 
 namespace App;
 
-
+use Component\Notification\NotificationWidget;
 use Nextras\Application\UI\SecuredLinksPresenterTrait;
 
+/**
+ * Class ComponentsPresenter
+ * @package App
+ */
 class ComponentsPresenter extends BasePresenter {
 
 	use SecuredLinksPresenterTrait;
@@ -27,5 +31,12 @@ class ComponentsPresenter extends BasePresenter {
 	 */
 	protected function createComponentDropzone() {
 		return $this->componentFactory->create('\Component\Dropzone\Form');
+	}
+
+	/**
+	 * @return NotificationWidget
+	 */
+	protected function createComponentNotification() {
+		return new NotificationWidget();
 	}
 } 

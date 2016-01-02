@@ -20,7 +20,7 @@
 
 			<div class="btn-toolbar">
 				<div class="btn-group">
-					<button data-link="{link loadRoleForm!}" id="add" class='btn btn-success'>Přidat</button>
+					<a n:href="loadRoleForm!" id="add" class='btn btn-success'>Přidat</a>
 				</div>
 				<div class="btn-group">
 					<button class="btn btn-danger" id="marked">Odebrat</button>
@@ -34,19 +34,7 @@
 				</div>
 			</div>
 
-			<div id="notselectedAlert" class="alert alert-block alert-danger fade in hidden">
-				<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-				<h4 class="alert-heading">Nevybrali jste žádný řádek</h4>
-				<p>Vyberte prosím řádky, které chcete vymazat zaškrtnutím příslušného řádku a poté stiskněte tlačítko "Odebrat" znovu.</p>
-			</div>
-			<div id="customError" class="alert alert-block alert-danger fade in hidden alert-dismissable">
-				<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-				<p></p>
-			</div>
-			<div id="customSuccess" class="alert alert-block alert-success fade in hidden">
-				<button data-dismiss="alert" class="close" type="button" aria-hidden="true">&times;</button>
-				<p></p>
-			</div>
+			{control notification}
 
 			<hr />
 			<div class='clearfix'>
@@ -57,8 +45,10 @@
 
 					<div class="tab-content">
 						<div class="tab-pane active" id="home">
-							<div class="content panel-body" id="grid">
-								{include content.latte}
+							<div class="content panel-body" id="grid" data-link="{plink refresh!}">
+								<span n:snippet="content">
+									{include content.latte}
+								</span>
 							</div>
 						</div>
 					</div>

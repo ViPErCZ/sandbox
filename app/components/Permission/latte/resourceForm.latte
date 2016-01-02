@@ -4,11 +4,9 @@
 	$(function () {
 		var form = $("#grid .well form");
 		var content = $("#home #grid");
-		var link = {plink refresh! templateName=>'contentResource'};
 		var preloader = {$basePath} +'/img/ajaxLoader.gif';
-		$.componentForms.init(form, content, link, preloader);
+		$.componentForms.init(form, content, preloader);
 	});
-
 </script>
 <div class='well'>
 	{form form class=>"ajax form-horizontal"}

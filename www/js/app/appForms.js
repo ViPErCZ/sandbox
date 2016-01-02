@@ -5,23 +5,17 @@
  * appForms jQuery plugin
  *
  * @author Martin Chudoba
- * @version 1.3.0
+ * @version 2.0.0
  * @returns appForms
  */
 var appForms = function() {
 
     /** @var Form to submit */
-    var form;
-    var parentForm;
-    var preloader;
-    var submitButton;
-    var panel;
-    var customSuccess;
-    var customError;
-    var addLink;
-    var refreshLink;
+    var loader;
+	var refreshLink;
+    this.customSuccess = $();
+    this.customError = $();
     this.grid = null;
-    var tabfilterData;
 	this.confirmDialogTitle = '';
 	this.confirmDialogMessage = '';
 	this.confirmDialogGeneratorLinkUrl = null;
@@ -33,19 +27,21 @@ var appForms = function() {
     var actionBar = {
         buttons: [],
         init: function(plugin) {
+			var bar = this;
             var addButton = {
-                selector: $("#add"),
-                click: function(event) {
+                selector: $('#add'),
+                click: function(ui, event) {
                     event.preventDefault();
+					bar.disablePanel();
                     if(plugin) {
-                        plugin.panel.html('<div class="well center panel"><img src="' + plugin.preloader + '" alt="loading..." /></div>');
-                        plugin.panel.load(plugin.addLink);
+						plugin.customError.alert('close');
+						snippetCallback(plugin, ui.attr('href'), this, event);
                     }
                 }
             };
             var removeButton = {
                 selector: $("#marked, #dropdown-marked"),
-                click: function(event) {
+                click: function(ui, event) {
                     event.preventDefault();
                     if (plugin) {
                         var selectedArr = {};
@@ -54,25 +50,37 @@ var appForms = function() {
                                 selectedArr[$(this).data('primary')] = $(this).data('primary');
                         });
                         if (Object.keys(selectedArr).length != 0) {
-                            $("#notselectedAlert").hide();
+							plugin.customError.alert('close');
                             showConfirmDialog(plugin, JSON.stringify(selectedArr));
                             $('.confirm').modal('show');
                         } else {
-                            $("#notselectedAlert").removeClass('hidden').show();
+                            $(".notSelectedAlert").removeClass('hidden').show();
                         }
                     }
                 }
             };
-            this.buttons.push(addButton);
-            this.buttons.push(removeButton);
+            this.addButton(addButton);
+            this.addButton(removeButton);
             this.action();
             return this;
         },
+		disablePanel: function() {
+			$.each(this.buttons, function(index, value) {
+				value.selector.addClass('disabled');
+				value.selector.closest('.btn-toolbar').find('.dropdown-toggle').addClass('disabled');
+			});
+		},
+		enablePanel: function() {
+			$.each(this.buttons, function(index, value) {
+				value.selector.removeClass('disabled');
+				value.selector.closest('.btn-toolbar').find('.dropdown-toggle').removeClass('disabled');
+			});
+		},
         action: function() {
             $.each(this.buttons, function(index, value) {
                 value.selector.off('click').on('click', function(event) {
                     if (value.click != undefined && typeof(value.click) == "function")
-                    value.click(event);
+                    value.click(value.selector, event);
                 });
             });
         },
@@ -92,15 +100,18 @@ var appForms = function() {
         }
     };
 
-    /** Znovunačtení datagridu
-     * ************************************ */
-    var refreshContent = function(obj) {
-        obj.grid.html('<div class="well center"><img src="' + obj.preloader + '" alt="loading..." /></div>');
-        obj.grid.load(obj.refreshLink, { tabfilter: obj.tabfilterData }, function() {
-            $.nette.load();
-            actions(obj);
-        });
-    };
+	/**
+	 * snippet request callback
+	 * @param plugin
+	 * @param link
+	 * @param ui
+	 * @param e
+	 * @returns {jqXHR|null}
+	 */
+	var snippetCallback = function(plugin, link, ui, e) {
+		plugin.grid.find("span:first").html('<div class="well center"><img src="' + loader + '" alt="loading..." /></div>');
+		return $.nette.ajax({url: link }, ui, e);
+	};
 
     /** Actions
      * ************************************* */
@@ -118,46 +129,18 @@ var appForms = function() {
         /** Editace řádku
          * ********************************************* */
          that.grid.find(".editable").off("click").on("click", function(event) {
-            event.preventDefault();
-            that.panel.html('<div class="well center panel"><img src="' + that.preloader + '" alt="loading..." /></div>');
-            that.panel.load($(this).attr('href'));
+			 event.preventDefault();
+			 that.customError.alert('close');
+			 snippetCallback(that, $(this).attr('href'), this, event);
         });
 
         /** Odebrání řádku
          * ********************************************* */
         that.grid.find(".removable").off("click").on("click", function(event) {
             event.preventDefault();
+			that.customError.alert('close');
 			showConfirmDialogWithLink(that, $(this).attr('href'));
         });
-
-        /** Submit form */
-        /* ********************************************** */
-        that.submitButton.off('click').on("click", function(event){
-            event.preventDefault();
-            for (var i = 0; i < document.forms.length; i++) {
-                Nette.initForm(document.forms[i]);
-            }
-            that.form.ajaxSubmit(function(msg) {
-                if (msg.result == "success") {
-                    that.parentForm.modal('hide');
-                    that.parentForm.on('hidden.bs.modal', function (param) {
-                        if (event != null && event.target.id == "submit") {
-                            event = null;
-                            //refreshContent(obj);
-                            that.customSuccess.find('p').text('Úspěšně uloženo...');
-                            that.customSuccess.removeClass('hidden').show();
-                            setTimeout(function(){ that.customSuccess.alert('close') }, 1500);
-                        }
-                        that.parentForm.find('.modal-body').html('<p>Načítám…</p>');
-                    });
-                } else if (msg.result == "error") {
-                    that.parentForm.modal('hide');
-                    that.customError.find('p').text(msg.message);
-                    that.customError.removeClass('hidden').show();
-                }
-            });
-        });
-
     };
 
 	/**
@@ -172,7 +155,7 @@ var appForms = function() {
 	 * @param plugin
 	 * @param data
 	 */
-	showConfirmDialog = function (plugin, data) {
+	var showConfirmDialog = function (plugin, data) {
 		var dialog = $('.confirm');
 		dialog.modal('show');
 		var confirmButton = $('.confirm .modal-footer .confirm-button');
@@ -187,7 +170,7 @@ var appForms = function() {
 				confirmButton.removeClass('disabled');
 				confirmButton.on('click', function (e) {
 					e.preventDefault();
-					removeCallback(plugin, dialog, confirmButton.data('link'));
+					removeCallback(plugin, dialog, confirmButton.data('link'), this, e);
 				});
 			}
 		});
@@ -198,13 +181,13 @@ var appForms = function() {
 	 * @param plugin
 	 * @param link
 	 */
-	showConfirmDialogWithLink = function (plugin, link) {
+	var showConfirmDialogWithLink = function (plugin, link) {
 		var dialog = $('.confirm');
 		dialog.modal('show');
 		var confirmButton = $('.confirm .modal-footer .confirm-button');
 		confirmButton.off('click').on('click', function (e) {
 			e.preventDefault();
-			removeCallback(plugin, dialog, link);
+			removeCallback(plugin, dialog, link, this, e);
 		});
 	};
 
@@ -213,38 +196,34 @@ var appForms = function() {
 	 * @param plugin
 	 * @param dialog
 	 * @param link
+	 * @param ui
+	 * @param e
 	 */
-	removeCallback = function (plugin, dialog, link) {
-		var that = plugin;
-		$.ajax({
-			type: 'get',
-			cache: false,
-			url: link,
-			success: function(msg) {
-				dialog.modal('hide');
-				dialog.on('hidden.bs.modal', function (e) {
-					if (msg.result == "success") {
-						that.customSuccess.find('p').text('Úspěšně odebráno...');
-						that.customSuccess.removeClass('hidden').show();
-						refreshContent(plugin);
-						setTimeout(function(){ that.customSuccess.alert('close') }, 1500);
-					} else if (msg.result == "error") {
-						that.customError.find('p').text(msg.message);
-						that.customError.removeClass('hidden').show();
-					} else if (msg.snippets != undefined) {
-						for(var k in msg.snippets) {
-							$("#" + k).html(msg.snippets[k]);
-							$.nette.load();
-							that.refresh();
-						}
+	var removeCallback = function (plugin, dialog, link, ui, e) {
+		dialog.modal('hide');
+		var xhr = $.nette.ajax({url: link }, ui, e);
+		if (xhr) {
+			xhr.success(function() {
+				plugin.customError.each(function() {
+					var container = $(this);
+					if (container.find('ul').length > 0) {
+						container.removeClass('hidden').show();
 					}
 				});
-			},
-			error: function(e, stastus) {
-				dialog.modal('hide');
-				alert('Ajaj nepovedl se ajax dotaz na server: ' + stastus);
-			}
-		});
+				plugin.customSuccess.each(function() {
+					var container = $(this);
+					if (container.find('ul').length > 0) {
+						container.removeClass('hidden').show();
+						setTimeout(function(){ container.addClass('hidden') }, 1500);
+					}
+				});
+			});
+			xhr.error(function() {
+				alert('Ajaj nepovedl se ajax dotaz na server.');
+			});
+		} else {
+			alert('Ajaj nepovedl se ajax dotaz na server.');
+		}
 	};
 
     this.getActionBar = function() {
@@ -262,35 +241,23 @@ var appForms = function() {
 		dialog += '<div class="modal-body"> <p class="message">' + plugin.confirmDialogMessage + '</p> </div>';
 		dialog += '<div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Storno</button>';
 		dialog += '<button type="button" class="btn btn-primary confirm-button">OK</button>';
-		dialog += '</div> </div><!-- /.modal-content --> </div><!-- /.modal-dialog --> </div><!-- /.modal -->';
-		content.append(dialog);
+		dialog += '</div></div><!-- /.modal-content --> </div><!-- /.modal-dialog --> </div><!-- /.modal -->';
+		content.find("span:first").append(dialog);
 	};
 
 	/**
 	 * Init plugin
 	 * @param preloader
 	 * @param form
-	 * @param panel
-	 * @param customSuccess
-	 * @param customError
-	 * @param addLink
-	 * @param refreshLink
 	 * @param grid
-	 * @param tabfilterData
 	 * @returns {*}
 	 */
-    this.init = function(preloader, form, panel, customSuccess, customError, addLink, refreshLink, grid, tabfilterData) {
-        this.preloader = preloader;
-        this.parentForm = form;
-        this.form = form.find("form");
-        this.submitButton = this.form.find("#submit");
-        this.panel = panel;
-        this.customSuccess = customSuccess;
-        this.customError = customError;
-        this.addLink = addLink;
-        this.refreshLink = refreshLink;
+    this.init = function(preloader, grid) {
+        loader = preloader;
         this.grid = grid;
-        this.tabfilterData = tabfilterData;
+		this.customSuccess = $(".customSuccess");
+		this.customError = $(".customError");
+		refreshLink = grid.data('link');
 
         $(".alert").alert();
         $.nette.load();

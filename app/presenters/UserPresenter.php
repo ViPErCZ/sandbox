@@ -1,9 +1,9 @@
 <?php
 
 namespace App;
+use Component\Notification\NotificationWidget;
 use Model\Permission\RoleRepository;
 use Model\Permission\UserRepository;
-use Nette\Application\Responses\JsonResponse;
 use Nette\Forms\Container;
 use Nextras\Application\UI\SecuredLinksPresenterTrait;
 use Nextras\Datagrid\MyDatagrid;
@@ -18,10 +18,13 @@ class UserPresenter extends BasePresenter {
 	use SecuredLinksPresenterTrait;
 	
 	/** @var \Model\Permission\UserRepository */
-	private $userRepository;
+	protected $userRepository;
 
 	/** @var \Model\Permission\RoleRepository */
-	private $roleRepository;
+	protected $roleRepository;
+
+	/** @var int */
+	protected $state = 0;
 
 	/** Inject
 	 * @param \Model\Permission\RoleRepository $roleRepository
@@ -37,27 +40,31 @@ class UserPresenter extends BasePresenter {
 	public function injectUserRepository(UserRepository $userRepository) {
 		$this->userRepository = $userRepository;
 	}
-	
-	/** Signál pro refresh
-	 * 
-	 * @param string $templateName
-	 */
-	public function handleRefresh($templateName) {
-		$template = $this->template;
-		$template->setFile(APP_DIR . "/templates/" . $this->getName() . "/" . $templateName . ".latte");
 
-		$template->render();
-		$this->terminate();
+	/**
+	 * @param $message
+	 */
+	public function handleRefresh($message) {
+		if ($this->isAjax()) {
+			$this->redrawControl("wrapper");
+			$this->redrawControl("content");
+			if ($message) {
+				$this['notification']->addSuccess($message);
+				$this['notification']->redrawControl('success');
+			}
+		}
 	}
-	
-	/** Signál pro načtení formuláře
-	 * 
-	 * @param int $userID
+
+	/**
+	 * @param $userID
 	 */
 	public function handleLoadForm($userID) {
 		$this['userForm']->setUserID($userID);
-		$this['userForm']->render();
-		$this->terminate();
+		$this->state = 1;
+		if ($this->isAjax()) {
+			$this->redrawControl("wrapper");
+			$this->redrawControl("content");
+		}
 	}
 
 	/**
@@ -65,13 +72,10 @@ class UserPresenter extends BasePresenter {
 	 * @param $usersID
 	 */
 	public function handleDelete($usersID) {
-		$json = new \stdClass();
-
-		$json->result = "error";
-		$json->message = "Tato funkce není momentálně implementována.";
-
-		$response = new JsonResponse($json);
-		$this->getPresenter()->sendResponse($response);
+		if ($this->isAjax()) {
+			$this['notification']->addError("Tato funkce není momentálně implementována.");
+			$this['notification']->redrawControl("error");
+		}
 	}
 
 	/**
@@ -88,6 +92,20 @@ class UserPresenter extends BasePresenter {
 	 */
 	public function handleRemove() {
 		$this->terminate();
+	}
+
+	/**
+	 *
+	 */
+	public function renderDefault() {
+		$this->template->state = $this->state;
+	}
+
+	/**
+	 * @return NotificationWidget
+	 */
+	protected function createComponentNotification() {
+		return new NotificationWidget();
 	}
 
 	/** Vytvoří komponentu gridu

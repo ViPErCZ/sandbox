@@ -1,2 +1,6 @@
-{include js.latte}
-{control grid}
+{if $state == 0}
+	{include js.latte}
+	{control grid}
+{else}
+	{control userForm}
+{/if}
