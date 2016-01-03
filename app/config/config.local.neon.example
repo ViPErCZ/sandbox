@@ -7,6 +7,15 @@ parameters:
 		password: *****
 		charset: utf8
 		collation: utf8_czech_ci
+
+gopay:
+	id        : ***
+	secretKey : ***
+	imagePath : %wwwDir%/images
+	testMode  : true
+	channels:
+	    gopay: 'Gopay - Elektronická peněženka'
+	    transfer: 'Bankovní převod'
 		
 nette:
 	database:
