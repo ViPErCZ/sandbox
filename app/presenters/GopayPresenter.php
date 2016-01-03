@@ -7,6 +7,7 @@
 
 namespace App;
 
+use Component\Notification\NotificationWidget;
 use Markette\Gopay;
 use Nette\Application\UI\Form;
 use Nette\Database\Table\IRow;
@@ -28,7 +29,11 @@ class GopayPresenter extends BasePresenter {
 	 *
 	 */
 	public function renderDefault() {
-		$this->template->channels = $this->gopay->getChannels();
+		try {
+			$this->template->channels = $this->gopay->getChannels();
+		} catch (Gopay\GopayFatalException $e) {
+			$this->template->channels = array();
+		}
 	}
 
 	/**
@@ -92,9 +97,9 @@ class GopayPresenter extends BasePresenter {
 					'encryptedSignature' => $encryptedSignature,
 				));
 
-				$paied = $payment->isPaid();
-				$this->logger->log("Notifikace o zaplaceni: " . $paied);
-				if ($paied) {
+				$paid = $payment->isPaid();
+				$this->logger->log("Notifikace o zaplaceni: " . $paid);
+				if ($paid) {
 					$this->gopayModel->paied($paymentSessionId);
 				}
 			} else {
@@ -162,6 +167,13 @@ class GopayPresenter extends BasePresenter {
 			echo $e->getMessage();
 			echo 'Platební služba Gopay bohužel momentálně nefunguje. Zkuste to prosím za chvíli.';
 		}
+	}
+
+	/**
+	 * @return NotificationWidget
+	 */
+	protected function createComponentNotification() {
+		return new NotificationWidget();
 	}
 
 }
