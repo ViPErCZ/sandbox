@@ -43,7 +43,11 @@
 						<div class="tab-pane active panel" id="home">
 							<div class="content panel-body" id="grid">
 								{dump $channels}
-								{control form}
+								{form form}
+									{foreach $channels as $channel}
+										{input $channel->control class=>'btn btn-primary'}
+									{/foreach}
+								{/form}
 							</div>
 						</div>
 					</div>
