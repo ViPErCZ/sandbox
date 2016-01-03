@@ -5,8 +5,33 @@
 		var preloader = {$basePath} + '/img/ajaxLoader.gif';
 		var grid = $('#main-content #home #grid');
 		$.appForms.confirmDialogTitle = "Varování";
-		$.appForms.confirmDialogMessage = "Opravdu vymazat...?";
+		$.appForms.confirmDialogMessage = "Opravdu deaktivovat...?";
 		$.appForms.confirmDialogGeneratorLinkUrl = {plink generateRemoveUrl!};
 		$.appForms.init(preloader, grid);
+
+		var bar = $.appForms.getActionBar();
+		var deactivatedButton = {
+			selector: $("#deactivate"),
+			click: function (btn, event) {
+				event.preventDefault();
+
+				var selectedArr = $.appForms.getSelectedRows();
+				if (Object.keys(selectedArr).length != 0) {
+					$.appForms.customError.alert('close');
+					$.ajax({
+						type: 'get',
+						cache: false,
+						url: {plink generateRemoveUrl!},
+						data: { data: JSON.stringify(selectedArr) },
+						success: function(msg) {
+							$.appForms.showConfirmDialogWithLink(msg, 'Varování', 'Opravdu deaktivovat... ?');
+						}
+					});
+				} else {
+					$(".notSelectedAlert").removeClass('hidden').show();
+				}
+			}
+		};
+		bar.addButton(deactivatedButton);
 	});
 </script>

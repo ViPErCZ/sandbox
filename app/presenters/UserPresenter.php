@@ -5,6 +5,8 @@ use Component\Notification\NotificationWidget;
 use Model\Permission\RoleRepository;
 use Model\Permission\UserRepository;
 use Nette\Forms\Container;
+use Nette\Utils\Json;
+use Nette\Utils\JsonException;
 use Nextras\Application\UI\SecuredLinksPresenterTrait;
 use Nextras\Datagrid\MyDatagrid;
 
@@ -72,9 +74,33 @@ class UserPresenter extends BasePresenter {
 	 * @param $usersID
 	 */
 	public function handleDelete($usersID) {
+		if (is_string($usersID)) {
+			try {
+				$usersID = (array)Json::decode($usersID);
+				$usersID = array_values($usersID);
+			} catch (JsonException $e) {
+				$this['notification']->addError($e->getMessage());
+				if ($this->isAjax()) {
+					$this['notification']->redrawControl('error');
+				}
+			}
+		}
+		$result = $this->userRepository->deactivate($usersID);
+
+		if ($result === TRUE) {
+			$this['notification']->addSuccess("Úspěšně deaktivováno...");
+		} else {
+			if (strpos("Integrity constraint violation", $result) != -1) {
+				$this['notification']->addError("Uživatele se nepovedlo deaktivovat.");
+			} else {
+				$this['notification']->addError($result);
+			}
+		}
+
 		if ($this->isAjax()) {
-			$this['notification']->addError("Tato funkce není momentálně implementována.");
-			$this['notification']->redrawControl("error");
+			$this['notification']->redrawControl('error');
+			$this['notification']->redrawControl('success');
+			$this['grid']->redrawControl();
 		}
 	}
 

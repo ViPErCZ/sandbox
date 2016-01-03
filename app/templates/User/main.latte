@@ -23,7 +23,7 @@
 					<a n:href="loadForm!" id="add" class='ajax btn btn-success' n:if="$user->isAllowed('user_management', 'add')">Přidat</a>
 				</div>
 				<div class="btn-group">
-					<a n:href="remove!" class="btn btn-danger" id="marked" n:if="$user->isAllowed('user_management', 'edit')">Odebrat</a>
+					<a n:href="remove!" class="btn btn-danger" id="deactivate" n:if="$user->isAllowed('user_management', 'edit')">Deaktivovat</a>
 				</div>
 			</div>
 

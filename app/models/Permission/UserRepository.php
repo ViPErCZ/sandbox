@@ -62,4 +62,25 @@ class UserRepository extends AbstractRepository {
 	public function fetch() {
 		return $this->entityManager->getRepository(UserRepository::ENTITY)->fetch();
 	}
+
+	/**
+	 * @param $userID
+	 * @return bool|string
+	 * @throws \slimORM\Exceptions\RepositoryException
+	 */
+	public function deactivate($userID) {
+		try {
+			$repository = $this->entityManager->getRepository(UserRepository::ENTITY);
+			/** @var UserEntity $user */
+			foreach ($repository->read()->where("userID", $userID) as $user) {
+				if ($user->getUserID() != 1) {
+					$user->setActive(false);
+				}
+			}
+			$repository->save();
+			return TRUE;
+		} catch (\PDOException $e) {
+			return $e->getMessage();
+		}
+	}
 }

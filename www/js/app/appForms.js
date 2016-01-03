@@ -44,11 +44,7 @@ var appForms = function() {
                 click: function(ui, event) {
                     event.preventDefault();
                     if (plugin) {
-                        var selectedArr = {};
-                        plugin.grid.find('input[type="checkbox"]').each(function () {
-                            if ($(this).prop('checked'))
-                                selectedArr[$(this).data('primary')] = $(this).data('primary');
-                        });
+                        var selectedArr = plugin.getSelectedRows();
                         if (Object.keys(selectedArr).length != 0) {
 							plugin.customError.alert('close');
                             showConfirmDialog(plugin, JSON.stringify(selectedArr));
@@ -86,10 +82,7 @@ var appForms = function() {
         },
         addButton: function(btn) {
             this.buttons.push(btn);
-            btn.selector.off('click').on('click', function(event) {
-                if (btn.click != undefined && typeof(btn.click) == "function")
-                    btn.click(event);
-            });
+			this.action();
         },
         getButton: function(index) {
             if (index >= 0 && index < this.buttons.length) {
@@ -111,6 +104,22 @@ var appForms = function() {
 	var snippetCallback = function(plugin, link, ui, e) {
 		plugin.grid.find("span:first").html('<div class="well center"><img src="' + loader + '" alt="loading..." /></div>');
 		return $.nette.ajax({url: link }, ui, e);
+	};
+
+	/**
+	 *
+	 * @returns {{}}
+	 */
+	this.getSelectedRows = function() {
+		var selectedArr = {};
+		if (this.grid) {
+			this.grid.find('input[type="checkbox"]').each(function () {
+				if ($(this).prop('checked') && $(this).data('primary') != undefined) {
+					selectedArr[$(this).data('primary')] = $(this).data('primary');
+				}
+			});
+		}
+		return selectedArr;
 	};
 
     /** Actions
@@ -139,7 +148,7 @@ var appForms = function() {
         that.grid.find(".removable").off("click").on("click", function(event) {
             event.preventDefault();
 			that.customError.alert('close');
-			showConfirmDialogWithLink(that, $(this).attr('href'));
+			that.showConfirmDialogWithLink($(this).attr('href'), that.confirmDialogTitle, that.confirmDialogMessage);
         });
     };
 
@@ -178,11 +187,21 @@ var appForms = function() {
 
 	/**
 	 *
-	 * @param plugin
 	 * @param link
+	 * @param title
+	 * @param message
 	 */
-	var showConfirmDialogWithLink = function (plugin, link) {
+	this.showConfirmDialogWithLink = function (link, title, message) {
 		var dialog = $('.confirm');
+
+		if (title != undefined) {
+			dialog.find(".modal-title").text(title);
+		}
+		if (message != undefined) {
+			dialog.find(".message").text(message);
+		}
+
+		var plugin = this;
 		dialog.modal('show');
 		var confirmButton = $('.confirm .modal-footer .confirm-button');
 		confirmButton.off('click').on('click', function (e) {
@@ -248,7 +267,6 @@ var appForms = function() {
 	/**
 	 * Init plugin
 	 * @param preloader
-	 * @param form
 	 * @param grid
 	 * @returns {*}
 	 */
