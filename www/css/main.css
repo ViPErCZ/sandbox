@@ -26,14 +26,16 @@ html, body {
   z-index: 2;
 }
 .form-signin input[type="text"] {
-  margin-bottom: -1px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+	margin-bottom: -1px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+	padding: 5px;
 }
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+	margin-bottom: 10px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	padding: 5px;
 }
 .table td {
 	vertical-align: middle;
@@ -85,4 +87,17 @@ html, body {
 }
 .success > div > p, .success > div > ul {
 	margin-bottom: 0;
+}
+.checkbox label, .radio label {
+	cursor: pointer;
+	font-weight: 400;
+	margin-bottom: 0;
+	min-height: 20px;
+	padding-left: 2px;
+}
+.icheckbox_square-blue, .iradio_square-blue {
+	margin-right: 4px;
+}
+.login-box {
+	margin-top: 3%;
 }

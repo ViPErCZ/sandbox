@@ -112,21 +112,16 @@ class Login extends BaseControl {
 		$form->setTranslator($this->translator);
 
 		$form->addText('nick', $this->translator->translate('login_nick_label'))
-			->setAttribute('class', 'form-control')
-			->setAttribute('placeholder', 'Nick')
 			->setEmptyValue('')
 			->setRequired("Prosím zadejte vaše přihlašovací jméno.");
 
 		$form->addPassword('pass', $this->translator->translate('login_pass_label'))
-			->setAttribute('class', 'form-control')
-			->setAttribute('placeholder', 'Heslo')
 			->setEmptyValue('')
 			->setRequired("Prosím zadejte vaše přihlašovací heslo.");
 
 		$form->addCheckbox("remember", "Zapamatovat si přihlášení");
 
-		$form->addSubmit('sender', 'Přihlásit se')
-			->setAttribute('class', "btn btn-primary btn-lg btn-block");
+		$form->addSubmit('sender', 'Přihlásit se');
 
 		$form->onSuccess[] = callback($this, 'LoginFormSubmitted');
 

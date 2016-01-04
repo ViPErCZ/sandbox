@@ -1,21 +1,54 @@
-{foreach $flashes as $flash}
-	<div class="alert alert-danger">{$flash->message}</div>
-{/foreach}                         
-{form loginForm class=>"form-signin"}
-<h2 class="form-signin-heading">Login</h2>
-{input nick}
-{input pass}
-<label class="checkbox">
-	{input remember}
-</label>
-<p n:if="$googleClient || $facebookClient">
-	<a href="{$facebookClient->getLoginUrl()}" n:if="$facebookClient"><img src="{$basePath}/img/ico-facebook.gif" alt="facebook" /></a>
-	<a href="{$googleClient->createAuthUrl()}" n:if="$googleClient">
-		<img src="{$basePath}/img/gplus-32.png" alt="facebook" />
-	</a>
-</p>
-<p>
-	<a href="{plink Registration:}">registrovat se</a>
-</p>
-{input sender}
-{/form}
+<div class="login-box">
+
+	<div class="login-logo">
+		<a href="#"><b>Sandbox</b> app</a>
+	</div><!-- /.login-logo -->
+
+	<div class="login-box-body">
+
+	{foreach $flashes as $flash}
+		<div class="alert alert-danger">{$flash->message}</div>
+	{/foreach}
+	{form loginForm class=>"form-signin"}
+		<p class="login-box-msg">Pro pokračování se přihlas...</p>
+
+		<div class="form-group has-feedback">
+			{input nick class=>'form-control', placeholder=>'Nick'}
+			<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+		</div>
+
+		<div class="form-group has-feedback">
+			{input pass class=>'form-control', placeholder=>'Heslo'}
+			<span class="glyphicon glyphicon-lock form-control-feedback"></span>
+		</div>
+
+		<div class="row">
+
+			<div class="col-xs-10">
+				<div class="checkbox icheck">
+					<label>
+						{input remember}
+					</label>
+				</div>
+			</div>
+
+		</div>
+
+		{input sender class=>'btn btn-primary btn-lg btn-block'}
+
+	{/form}
+
+		<div class="social-auth-links text-center" n:if="$googleClient || $facebookClient">
+			<p>- nebo -</p>
+			<a href="{$facebookClient->getLoginUrl()}" n:if="$facebookClient" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Facebook</a>
+			<a href="{$googleClient->createAuthUrl()}" n:if="$googleClient" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Google+</a>
+		</div>
+
+		<p>
+			<a href="{plink PassRestore:}">zapomenuté heslo</a><br>
+			<a href="{plink Registration:}">registrovat se</a>
+		</p>
+
+	</div>
+
+</div>
