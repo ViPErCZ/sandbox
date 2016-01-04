@@ -29,6 +29,8 @@
 	<link rel="stylesheet" href="{$basePath}/dist/css/skins/_all-skins.min.css">
 	<!-- iCheck -->
 	<link rel="stylesheet" href="{$basePath}/plugins/iCheck/square/blue.css">
+	<!-- Pace style -->
+	<link rel="stylesheet" href="{$basePath}/plugins/pace/pace.min.css">
 
 	<!-- Custom css -->
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/main.css" type="text/css">
@@ -58,6 +60,9 @@
 	<!-- iCheck -->
 	<script src="{$basePath}/plugins/iCheck/icheck.min.js"></script>
 
+	<!-- PACE -->
+	<script src="{$basePath}/plugins/pace/pace.min.js"></script>
+
 	<script>
 		$(function() {
 			$.nette.init();
@@ -82,6 +87,8 @@
 				radioClass: 'iradio_square-blue',
 				increaseArea: '20%' // optional
 			});
+
+			$(document).ajaxStart(function() { Pace.restart(); });
 
 		});
 	</script>
