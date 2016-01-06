@@ -126,7 +126,8 @@ var appForms = function() {
      * ************************************* */
     var actions = function(obj) {
         var that = obj;
-        that.getActionBar().action();
+		var bar = that.getActionBar();
+        bar.action();
 
         /** Nastavení close u alert zpráv
          * ********************************************* */
@@ -140,6 +141,7 @@ var appForms = function() {
          that.grid.find(".editable").off("click").on("click", function(event) {
 			 event.preventDefault();
 			 that.customError.alert('close');
+			 bar.disablePanel();
 			 snippetCallback(that, $(this).attr('href'), this, event);
         });
 
