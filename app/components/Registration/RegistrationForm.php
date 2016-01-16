@@ -81,9 +81,10 @@ class RegistrationForm extends BaseControl {
 		$contactEntity->setUser($userEntity);
 
 		try {
-			$result = $this->contactRepository->save(TRUE, $contactEntity);
+			$this->contactRepository->push($contactEntity);
+			$result = $this->contactRepository->save();
 
-			if ($result instanceof ContactEntity) {
+			if ($result) {
 				$this->flashMessage("Vaše registrace proběhla úspěšně.");
 				$this->redirect('this');
 			} else {
