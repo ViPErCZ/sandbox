@@ -7,26 +7,30 @@
 
 namespace Model\Registrators;
 
-
 use Model\Contact\ContactRepository;
 use Model\Contact\Entity\ContactEntity;
 use Model\Permission\Entity\UserEntity;
 
+/**
+ * Class Basic
+ * @package Model\Registrators
+ */
 class Basic implements iRegistrator {
 
 	/** @var \Model\Contact\ContactRepository */
-	private $contactRepository;
+	protected $contactRepository;
 
-	/** Construct
+	/**
+	 * Basic constructor.
 	 * @param ContactRepository $contactRepository
 	 */
 	public function __construct(ContactRepository $contactRepository) {
 		$this->contactRepository = $contactRepository;
 	}
 
-	/** Registrer
+	/**
 	 * @param array $data
-	 * @return mixed|ContactEntity
+	 * @return ContactEntity|TRUE
 	 */
 	public function register(array $data) {
 		$contactEntity = new ContactEntity();
@@ -40,9 +44,16 @@ class Basic implements iRegistrator {
 			$userEntity->setLastLogged($data['lastLogged']);
 		if (isset($data['ip']))
 			$userEntity->setIp($data['ip']);
+
 		$contactEntity->setUser($userEntity);
 
 		$this->contactRepository->push($contactEntity);
-		return $this->contactRepository->save();
+
+		$result = $this->contactRepository->save();
+		if ($result) {
+			return $this->contactRepository->get($this->contactRepository->getLastInsertID());
+		} else {
+			return $result;
+		}
 	}
 } 

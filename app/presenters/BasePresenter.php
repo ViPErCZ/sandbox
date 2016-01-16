@@ -2,10 +2,10 @@
 
 namespace App;
 
-use GettextTranslator\Gettext;
 use h4kuna\Gettext\InjectTranslator;
-use Illagrenan\Facebook\FacebookConnect;
+use Kdyby\Facebook\Facebook;
 use Nette;
+use Nextras\Application\UI\SecuredLinksPresenterTrait;
 use Services\iLogger;
 
 /**
@@ -16,6 +16,7 @@ use Services\iLogger;
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	use InjectTranslator;
+	use SecuredLinksPresenterTrait;
 
 	/** @var \iComponentFactory */
 	protected $componentFactory;
@@ -26,13 +27,13 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	/** @var \Google_Client */
 	private $googleClient;
 
-	/** @var \Illagrenan\Facebook\FacebookConnect */
+	/** @var Facebook */
 	private $facebookClient;
 
-	/** Inject
-	 * @param \Illagrenan\Facebook\FacebookConnect $facebookClient
+	/**
+	 * @param Facebook $facebookClient
 	 */
-	public function injectFacebookClient(FacebookConnect $facebookClient) {
+	public function injectFacebookClient(Facebook $facebookClient) {
 		$this->facebookClient = $facebookClient;
 	}
 
@@ -76,11 +77,11 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		}
 	}
 
-	/** Vytvoreni komponety - Formulář přihlašovacího okna
-	 *
-	 * @return Login      
+	/**
+	 * @return mixed
 	 */
 	public function createComponentLoginForm() {
+		/** @var  $form */
 		$form = $this->componentFactory->create('\Component\Login\LoginForm\Login');
 		$form->attach($this->logger);
 		$form->setGoogleClient($this->googleClient);

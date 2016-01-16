@@ -15,6 +15,7 @@ extensions:
 	gettextLatteExtension: h4kuna\Gettext\DI\GettextLatteExtension
 	console: Kdyby\Console\DI\ConsoleExtension
 	gopay: Markette\Gopay\Extension
+	facebook: Kdyby\Facebook\DI\FacebookExtension
 
 gettextLatteExtension:
 	langs:
@@ -30,26 +31,18 @@ application:
 	mapping:
 		*: App\*Module\*Presenter
 
-#facebookConnect:
-#	appName: 'Facebook Connect for nette - Sandbox'
-#	appId: '****'
-#	secret: '****'
-#	canvasUrl: '****'
-#	scope: 'email,offline_access,publish_stream'
-
 services:
 	- App\RouterFactory
 	router: @App\RouterFactory::createRouter
 	componentFactory:
 		class: \iComponentFactory
 		factory: \ComponentFactory
-	facebookSDK: @\Illagrenan\Facebook\FacebookConnect
 	authenticator:
 		class: \Model\Authenticators\MultiAuthenticator
 		setup:
 			- addAuthenticator("db", \Model\Authenticators\DbAuthenticator(@userRespository))
 			- addAuthenticator("google", \Model\Authenticators\GoogleAuthenticator(@userManager, @googleClient, TRUE))
-			- addAuthenticator("facebook", \Model\Authenticators\FacebookAuthenticator(@userManager, @\Illagrenan\Facebook\FacebookConnect, TRUE))
+			- addAuthenticator("facebook", \Model\Authenticators\FacebookAuthenticator(@userManager, @\Kdyby\Facebook\Facebook, TRUE))
 	logger: \Services\SQLLogger
 	database: @Nette\Database\Context
 	registrator: \Model\Registrators\Basic
@@ -66,11 +59,3 @@ services:
 	historyRepository: \Model\History\HistoryRepository
 	contactRepository: \Model\Contact\ContactRepository
 	userManager: \Model\Permission\UserManager
-#	googleClient:
-#		class: \Google_Client
-#		setup:
-#			- setApplicationName("Google Connect for nette - Sandbox")
-#			- setClientId("*******")
-#			- setClientSecret("******")
-#			- setRedirectUri("*****")
-#			- setScopes(['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'])

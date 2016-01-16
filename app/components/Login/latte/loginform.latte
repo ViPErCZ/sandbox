@@ -40,7 +40,7 @@
 
 		<div class="social-auth-links text-center" n:if="$googleClient || $facebookClient">
 			<p>- nebo -</p>
-			<a href="{$facebookClient->getLoginUrl()}" n:if="$facebookClient" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Facebook</a>
+			<a n:href="fbLogin-open!" n:if="$facebookClient" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Facebook</a>
 			<a href="{$googleClient->createAuthUrl()}" n:if="$googleClient" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Google+</a>
 		</div>
 

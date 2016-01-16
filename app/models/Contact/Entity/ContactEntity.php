@@ -115,7 +115,7 @@ class ContactEntity extends Entity {
 	 * @param \Model\Permission\Entity\UserEntity $user
 	 * @return $this
 	 */
-	public function setUser(UserEntity $user)
+	public function setUser(UserEntity $user = null)
 	{
 		$this->user = $user;
 		return $this;

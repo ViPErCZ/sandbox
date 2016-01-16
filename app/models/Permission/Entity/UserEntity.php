@@ -1,6 +1,7 @@
 <?php
 
 namespace Model\Permission\Entity;
+use Nette\Utils\DateTime;
 use slimORM\Entity\Entity;
 
 /**
@@ -145,10 +146,10 @@ class UserEntity extends Entity {
 	}
 
 	/**
-	 * @param \Nette\DateTime $lastLogged
+	 * @param DateTime $lastLogged
 	 * @return $this
 	 */
-	public function setLastLogged(\Nette\DateTime $lastLogged) {
+	public function setLastLogged(DateTime $lastLogged) {
 		$this->lastLogged = $lastLogged;
 		return $this;
 	}

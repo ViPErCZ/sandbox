@@ -3,12 +3,15 @@
 namespace Component\Login\LoginForm;
 
 use Component\Base\WithLogged\BaseControl;
-use Illagrenan\Facebook\FacebookConnect;
+use Kdyby\Facebook\Dialog\LoginDialog;
+use Kdyby\Facebook\Facebook;
+use Kdyby\Facebook\FacebookApiException;
 use Nette\Application\Responses\JsonResponse;
 use Nette\Application\UI\Form;
 use Nette\Security\AuthenticationException;
 use Nette\Security\User;
 use Nette\Localization\ITranslator;
+use Tracy\Debugger;
 
 /**
  * Description of Login
@@ -24,7 +27,7 @@ class Login extends BaseControl {
 	/** @var \Google_Client */
 	private $googleClient;
 
-	/** @var FacebookConnect */
+	/** @var Facebook */
 	private $facebookClient;
 
 	/** Konstruktor
@@ -48,9 +51,9 @@ class Login extends BaseControl {
 	}
 
 	/**
-	 * @param FacebookConnect $facebookClient
+	 * @param Facebook $facebookClient
 	 */
-	public function setFacebookClient(FacebookConnect $facebookClient) {
+	public function setFacebookClient(Facebook $facebookClient) {
 		$this->facebookClient = $facebookClient;
 	}
 
@@ -77,11 +80,11 @@ class Login extends BaseControl {
 	/**
 	 * Tato metoda odpovídá nastavené redirectURI adrese pro Facebbok
 	 */
-	public function handleFacebookLogin() {
+	/*public function handleFacebookLogin() {
 		$get = $this->getPresenter()->getRequest()->getParameters();
 		if (isset($get['code']) && $this->facebookClient) {
 			try {
-				$this->user->login("facebook", $this->facebookClient->getFacebookUser()->getEmail());
+				$this->user->login("facebook", $this->facebookClient->me->getEmail());
 				$this->notify("Uživatel se úspěšně přihlášil.");
 				$this->getPresenter()->redirect("Homepage:");
 			} catch (AuthenticationException $e) {
@@ -90,7 +93,7 @@ class Login extends BaseControl {
 				$this->getPresenter()->redirect("Homepage:");
 			}
 		}
-	}
+	}*/
 
 	/** Render
 	 *
@@ -128,8 +131,8 @@ class Login extends BaseControl {
 		return $form;
 	}
 
-	/** Odeslání formuláře
-	 * 
+	/**
+	 * @param Form $form
 	 */
 	public function LoginFormSubmitted(Form $form) {
 		$values = $form->getValues();
@@ -152,7 +155,7 @@ class Login extends BaseControl {
 
 				$this->notify("Uživatel se úspěšně přihlášil.");
 				if ($this->getPresenter()->isAjax()) {
-					$json = new stdClass();
+					$json = new \stdClass();
 					$json->isLogin = TRUE;
 					$response = new JsonResponse($json);
 					$this->getPresenter()->sendResponse($response);
@@ -165,11 +168,43 @@ class Login extends BaseControl {
 				$this->getPresenter()->redirect("Homepage:");
 			}
 		} elseif ($this->getPresenter()->isAjax()) {
-			$json = new stdClass();
+			$json = new \stdClass();
 			$json->isLogin = TRUE;
 			$response = new JsonResponse($json);
 			$this->getPresenter()->sendResponse($response);
 		}
+	}
+
+	/**
+	 * @return \Kdyby\Facebook\Dialog\LoginDialog
+	 */
+	protected function createComponentFbLogin() {
+		$dialog = $this->facebookClient->createDialog('login');
+		/** @var LoginDialog $dialog */
+
+		$dialog->onResponse[] = function (LoginDialog $dialog) {
+			$fb = $dialog->getFacebook();
+			try {
+				$me = $fb->api('/me?fields=name,first_name,last_name,email');
+				try {
+					$this->user->login("facebook", array(
+						"email" => $me->email,
+						"firstName" => $me->first_name,
+						"lastName" => $me->last_name)
+					);
+					$this->notify("Uživatel se úspěšně přihlášil.");
+					$this->getPresenter(true)->redirect("Homepage:");
+				} catch (AuthenticationException $e) {
+					$this->notify("Uživateli se nepovedlo přihlásit přes službu Facebook. " . $e->getMessage());
+					$this->flashMessage($e->getMessage());
+					$this->getPresenter(true)->redirect("Homepage:");
+				}
+			} catch(FacebookApiException $e) {
+				$this['form']->addError("Uživateli se nepovedlo přihlásit přes službu Facebook. " . $e->getMessage());
+			}
+		};
+
+		return $dialog;
 	}
 
 }
