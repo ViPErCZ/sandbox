@@ -8,10 +8,7 @@ namespace App;
  * @author     Martin Chudoba
  * @package    Sandbox
  */
-class HomepagePresenter extends BasePresenter
-{
-	public function renderDefault() {
-	}
+class HomepagePresenter extends BasePresenter {
 	
 	/** Odhlášení uživatele
 	 *  

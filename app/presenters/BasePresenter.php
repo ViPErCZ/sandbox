@@ -25,10 +25,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	protected $logger;
 
 	/** @var \Google_Client */
-	private $googleClient;
+	protected $googleClient;
 
 	/** @var Facebook */
-	private $facebookClient;
+	protected $facebookClient;
 
 	/**
 	 * @param Facebook $facebookClient
@@ -68,7 +68,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 		if (!$this->user->isLoggedIn() &&
 			(!$this->isLinkCurrent("Homepage:default") && !$this->isLinkCurrent("Registration:default") && !$this->isLinkCurrent("Gopay:notification"))
-			&& PHP_SAPI != 'cli') {
+			&& !$this->isLinkCurrent("PassRestore:default") && PHP_SAPI != 'cli') {
 			$this->redirect("Homepage:");
 		} else if ($this->user->isLoggedIn()) {
 			$authorizator = $this->user->getAuthorizator(TRUE);
