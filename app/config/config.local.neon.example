@@ -16,6 +16,12 @@ gopay:
 	channels:
 	    gopay: 'Gopay - Elektronická peněženka'
 	    transfer: 'Bankovní převod'
+
+facebook:
+    appId: "1234567890"
+    appSecret: "****************************************"
+    permissions: [public_profile, email] # theese are the default read permissions, you might need to
+    graphVersion: v2.5
 		
 nette:
 	database:
