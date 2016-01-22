@@ -1,0 +1,52 @@
+{block #content}
+	<div class="container">
+		<div class="content">
+			<div class="well">
+
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#home" data-toggle="tab">{_'Password reset'}</a></li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div class="tab-pane active" id="home">
+						<div class="well-lg">
+
+							<div class="callout callout-info">
+								<h4><i class="icon fa fa-info"></i> Reset hesla...</h4>
+								Zadej svoji <strong>emailovou adresu</strong>. Po zadání a stisknutí tlačítka <strong>"Obnovit heslo"</strong>
+									Vám přijde na zadaný email nové vygenerované heslo.
+							</div>
+
+							{snippet recoveryForm}
+								<div n:foreach="$flashes as $flash" class="alert alert-success">{$flash->message}</div>
+								{if count($flashes) == 0}
+									{form recoveryForm role => "form"}
+										{if $form->hasErrors()}
+											<div n:foreach="$form->errors as $error" class="alert alert-danger">{$error}</div>
+										{/if}
+										<div class="row form-group">
+											<div class="col-xs-12">
+												{label email /}
+												{input email class => "form-control", placeholder => "Email..."}
+											</div>
+										</div>
+										<div class="row form-group col-lg-10">
+											{input recover class => "btn btn-success"}
+										</div>
+									{/form}
+								{/if}
+							{/snippet}
+							<div class="row form-group col-xs-1">
+								<a href="{plink Homepage:}" class="btn btn-link">zpět na login stránku...</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+{/block}
