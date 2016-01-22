@@ -117,9 +117,8 @@ class UserEntity extends Entity {
 	}
 
 	/**
-	 * 
-	 * @param type $password
-	 * @return \Model\Permission\Entity\UserEntity
+	 * @param string $password
+	 * @return $this
 	 */
 	public function setPassword($password) {
 		$this->password = $this->calculateHash($password);
