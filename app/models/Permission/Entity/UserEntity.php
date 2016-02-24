@@ -74,6 +74,18 @@ class UserEntity extends Entity {
 	protected $roleName;
 
 	/**
+	 * @column
+	 * @var string
+	 */
+	protected $recoveryToken;
+
+	/**
+	 * @column
+	 * @var DateTime
+	 */
+	protected $recoveryTokenInserted;
+
+	/**
 	 * @return string
 	 */
 	public function getRoleName()
@@ -235,6 +247,32 @@ class UserEntity extends Entity {
 		return $this->userID;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getRecoveryToken() {
+		return $this->recoveryToken;
+	}
 
+	/**
+	 * @param string $recoveryToken
+	 */
+	public function setRecoveryToken($recoveryToken = null) {
+		$this->recoveryToken = $recoveryToken;
+	}
+
+	/**
+	 * @return DateTime
+	 */
+	public function getRecoveryTokenInserted() {
+		return $this->recoveryTokenInserted;
+	}
+
+	/**
+	 * @param DateTime $recoveryTokenInserted
+	 */
+	public function setRecoveryTokenInserted(DateTime $recoveryTokenInserted = null) {
+		$this->recoveryTokenInserted = $recoveryTokenInserted;
+	}
 
 }

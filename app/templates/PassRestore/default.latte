@@ -15,31 +15,58 @@
 
 							<div class="callout callout-info">
 								<h4><i class="icon fa fa-info"></i> Reset hesla...</h4>
-								Zadej svoji <strong>emailovou adresu</strong>. Po zadání a stisknutí tlačítka <strong>"Obnovit heslo"</strong>
-									Vám přijde na zadaný email nové vygenerované heslo.
+								{if $control['recovery']->token}
+								{else}
+									Zadej svoji <strong>emailovou adresu</strong>. Po zadání a stisknutí tlačítka <strong>"Obnovit heslo"</strong>
+										Vám přijde na zadaný email odkaz pro vygenerovaní nového hesla.
+								{/if}
 							</div>
 
 							{snippet recoveryForm}
 								<div n:foreach="$flashes as $flash" class="alert alert-success">{$flash->message}</div>
 								{if count($flashes) == 0}
-									{form recoveryForm role => "form"}
-										{if $form->hasErrors()}
-											<div n:foreach="$form->errors as $error" class="alert alert-danger">{$error}</div>
-										{/if}
-										<div class="row form-group">
-											<div class="col-xs-12">
-												{label email /}
-												{input email class => "form-control", placeholder => "Email..."}
+									{* {if $control['recovery']->token && $control['recovery']->isTokenValid()}
+										{form $control['recovery']->getNewPasswordForm()}
+											{if $form->hasErrors()}
+												<div n:foreach="$form->errors as $error" class="alert alert-danger">{$error}</div>
+											{/if}
+											<div class="row form-group">
+												<div class="col-xs-12">
+													{label pass1 /}
+													{input pass1 class => "form-control", placeholder => "Heslo..."}
+												</div>
 											</div>
-										</div>
-										<div class="row form-group col-lg-10">
-											{input recover class => "btn btn-success"}
-										</div>
-									{/form}
+											<div class="row form-group">
+												<div class="col-xs-12">
+													{label pass2 /}
+													{input pass2 class => "form-control", placeholder => "Heslo pro kontrolu..."}
+												</div>
+											</div>
+											<div class="row form-group col-lg-10">
+												{input recover class => "btn btn-success"}
+											</div>
+										{/form}
+									{else}
+										{form $control['recovery']['resetForm'] role => "form"}
+											{if $form->hasErrors()}
+												<div n:foreach="$form->errors as $error" class="alert alert-danger">{$error}</div>
+											{/if}
+											<div class="row form-group">
+												<div class="col-xs-12">
+													{label email /}
+													{input email class => "form-control", placeholder => "Email..."}
+												</div>
+											</div>
+											<div class="row form-group col-lg-10">
+												{input recover class => "btn btn-success"}
+											</div>
+										{/form}
+									{/if} *}
+									{control recovery}
 								{/if}
 							{/snippet}
 							<div class="row form-group col-xs-1">
-								<a href="{plink Homepage:}" class="btn btn-link">zpět na login stránku...</button>
+								<a href="{plink Homepage:}" class="btn btn-link">zpět na login stránku...</a>
 							</div>
 						</div>
 					</div>

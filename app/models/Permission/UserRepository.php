@@ -3,11 +3,13 @@
 namespace Model\Permission;
 
 use Model\Permission\Entity\UserEntity;
+use Nette\Utils\DateTime;
 use Nette\Utils\Paginator;
 use Sandbox\PasswordRecovery\IUserModel;
 use slimORM\AbstractRepository;
 use slimORM\Entity\Entity;
 use slimORM\EntityManager;
+use Tracy\Debugger;
 
 /**
  * Description of UserRepository
@@ -103,15 +105,41 @@ class UserRepository extends AbstractRepository implements IUserModel {
 	}
 
 	/**
-	 * @param $email
+	 * @param string $token
+	 * @param int $expirationTime
+	 * @return bool
+	 */
+	public function isTokenValid($token, $expirationTime = 10) {
+		try {
+			$user = $this->read()->where("recoveryToken", $token)->limit(1)->fetch();
+			if ($user) {
+				$current = new DateTime();
+				$diff = $current->diff(new DateTime($user->getRecoveryTokenInserted()));
+				if ($diff->format("%h") == 0 && $diff->format("%i") <= $expirationTime) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} catch (\PDOException $e) {
+			return false;
+		}
+	}
+
+	/**
+	 * @param $token
 	 * @param $newPassword
 	 * @return string|TRUE
 	 */
-	public function resetPassword($email, $newPassword) {
+	public function resetPassword($token, $newPassword) {
 		try {
-			$user = $this->read()->where("login", $email)->limit(1)->fetch();
+			$user = $this->read()->where("recoveryToken", $token)->limit(1)->fetch();
 			if ($user) {
 				$user->setPassword($newPassword);
+				$user->setRecoveryToken(null);
+				$user->setRecoveryTokenInserted(null);
 				return $this->save();
 			}
 		} catch (\PDOException $e) {
@@ -119,4 +147,21 @@ class UserRepository extends AbstractRepository implements IUserModel {
 		}
 	}
 
+	/**
+	 * @param $email
+	 * @param $token
+	 * @return string|TRUE
+	 */
+	public function saveToken($email, $token) {
+		try {
+			$user = $this->read()->where("login", $email)->limit(1)->fetch();
+			if ($user) {
+				$user->setRecoveryToken($token);
+				$user->setRecoveryTokenInserted(new DateTime());
+				return $this->push($user)->save();
+			}
+		} catch (\PDOException $e) {
+			return $e->getMessage();
+		}
+	}
 }
