@@ -14,23 +14,22 @@ use Nette\Localization\ITranslator;
 use Tracy\Debugger;
 
 /**
- * Description of Login
- *
- * @author Martin Chudoba
- * @licence GNU GPL component 
+ * Class Login
+ * @package Component\Login\LoginForm
  */
 class Login extends BaseControl {
 
 	/** @var User */
-	private $user;
+	protected $user;
 
 	/** @var \Google_Client */
-	private $googleClient;
+	protected $googleClient;
 
 	/** @var Facebook */
-	private $facebookClient;
+	protected $facebookClient;
 
-	/** Konstruktor
+	/**
+	 * Login constructor.
 	 * @param User $user
 	 * @param ITranslator $translator
 	 */
@@ -76,24 +75,6 @@ class Login extends BaseControl {
 			$this->getPresenter()->redirect("Homepage:");
 		}
 	}
-
-	/**
-	 * Tato metoda odpovídá nastavené redirectURI adrese pro Facebbok
-	 */
-	/*public function handleFacebookLogin() {
-		$get = $this->getPresenter()->getRequest()->getParameters();
-		if (isset($get['code']) && $this->facebookClient) {
-			try {
-				$this->user->login("facebook", $this->facebookClient->me->getEmail());
-				$this->notify("Uživatel se úspěšně přihlášil.");
-				$this->getPresenter()->redirect("Homepage:");
-			} catch (AuthenticationException $e) {
-				$this->notify("Uživateli se nepovedlo přihlásit přes službu Facebook. " . $e->getMessage());
-				$this->flashMessage($e->getMessage());
-				$this->getPresenter()->redirect("Homepage:");
-			}
-		}
-	}*/
 
 	/** Render
 	 *
