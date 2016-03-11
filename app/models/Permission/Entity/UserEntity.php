@@ -120,7 +120,7 @@ class UserEntity extends Entity {
 
 	/**
 	 * 
-	 * @param type $login
+	 * @param string $login
 	 * @return \Model\Permission\Entity\UserEntity
 	 */
 	public function setLogin($login) {
