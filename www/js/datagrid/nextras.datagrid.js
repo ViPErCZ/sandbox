@@ -28,6 +28,12 @@ $.nette.ext('datagrid', {
 		$('.grid #grid-cb').off('click').on('click', function() { // cb checkbox patch
 			$('.grid tbody tr td:first-child input[type=checkbox]').prop("checked", $(this).prop('checked'));
 		});
+		$('.grid #grid-cb').on('ifChecked', function(){
+			$('.grid tbody tr td:first-child input[type=checkbox]').iCheck('check');;
+		});
+		$('.grid #grid-cb').on('ifUnchecked', function(){
+			$('.grid tbody tr td:first-child input[type=checkbox]').iCheck('uncheck');;
+		});
 		$('.grid tbody td:not(.grid-col-actions)').off('click.datagrid').on('click.datagrid', function(e) {
 			if (e.ctrlKey) {
 				$(this).parents('tr').find('a[data-datagrid-edit]').trigger(datagrid.createClickEvent($(this)));
