@@ -10,7 +10,7 @@ namespace Model\Authenticators;
 use Model\Contact\Entity\ContactEntity;
 use Model\Permission\Entity\UserEntity;
 use Model\Permission\UserManager;
-use Nette\DateTime;
+use Nette\Utils\DateTime;
 use Nette\Object;
 use Nette\Security\AuthenticationException;
 use Nette\Security\IAuthenticator;

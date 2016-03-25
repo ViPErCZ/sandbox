@@ -38,7 +38,7 @@ class UserEntity extends Entity {
 	
 	/**
 	 * @column
-	 * @var \Nette\DateTime
+	 * @var \Nette\Utils\DateTime
 	 */
 	protected $lastLogged;
 	
@@ -208,7 +208,7 @@ class UserEntity extends Entity {
 	}
 
 	/**
-	 * @return \Nette\DateTime
+	 * @return \Nette\Utils\DateTime
 	 */
 	public function getLastLogged()
 	{

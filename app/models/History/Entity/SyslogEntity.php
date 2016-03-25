@@ -8,8 +8,7 @@
 namespace Model\History\Entity;
 
 
-use Nette\DateTime;
-use Nette\Diagnostics\Debugger;
+use Nette\Utils\DateTime;
 use slimORM\Entity\Entity;
 
 /**

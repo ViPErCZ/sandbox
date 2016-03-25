@@ -3,7 +3,7 @@
 namespace Services;
 
 use Nette\Database\Context;
-use Nette\DateTime;
+use Nette\Utils\DateTime;
 use Nette\Security\User;
 
 /**

@@ -3,7 +3,7 @@
 namespace Model\Authenticators;
 
 use Model\Permission\UserRepository;
-use Nette\DateTime;
+use Nette\Utils\DateTime;
 use Nette\Object;
 use Nette\Security as NS;
 
