@@ -3,6 +3,17 @@
 		var form = $("#home #grid .well form");
 		var content = $("#home #grid");
 		var preloader = {$basePath} + '/img/ajaxLoader.gif';
+		$.componentForms.tinymceInitCustomCallback = function () {
+			tinymce.get('area').on('FullscreenStateChanged', function(e) {
+				if (e.state) {
+					$('header').hide();
+					$('aside').hide();
+				} else {
+					$('header').show();
+					$('aside').show();
+				}
+			});
+		};
 		$.componentForms.init(form, content, preloader);
 	});
 </script>
