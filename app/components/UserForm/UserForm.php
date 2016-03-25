@@ -173,8 +173,8 @@ class UserForm extends BaseControl {
 			$form['password1']->setRequired("Prosím zadejte heslo.");
 		}
 
-		$form->onSuccess[] = callback($this, "Submit");
-		$form->onError[] = callback($this, "FormError");
+		$form->onSuccess[] = array($this, "Submit");
+		$form->onError[] = array($this, "FormError");
 
 		return $form;
 	}

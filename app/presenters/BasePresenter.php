@@ -2,20 +2,20 @@
 
 namespace App;
 
-use h4kuna\Gettext\InjectTranslator;
 use Kdyby\Facebook\Facebook;
+use Localization\TranslatorInjectTrait;
 use Nette;
 use Nextras\Application\UI\SecuredLinksPresenterTrait;
 use Services\iLogger;
 
 /**
- * Base class for all application presenters.
- *
- * @author     Martin Chudoba
+ * Class BasePresenter
+ * @package App
+ * @author Martin Chudoba <info@vipersoftware.net>
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
-	use InjectTranslator;
+	use TranslatorInjectTrait;
 	use SecuredLinksPresenterTrait;
 
 	/** @var \iComponentFactory */
@@ -78,10 +78,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	}
 
 	/**
-	 * @return mixed
+	 * @return \Component\Login\LoginForm\Login
 	 */
 	public function createComponentLoginForm() {
-		/** @var  $form */
+		/** @var \Component\Login\LoginForm\Login $form */
 		$form = $this->componentFactory->create('\Component\Login\LoginForm\Login');
 		$form->attach($this->logger);
 		$form->setGoogleClient($this->googleClient);

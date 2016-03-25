@@ -145,8 +145,8 @@ class ActionForm extends BaseControl {
             }
         }
 
-        $form->onSuccess[] = callback($this, "Submit");
-		$form->onError[] = callback($this, "Error");
+        $form->onSuccess[] = array($this, "Submit");
+		$form->onError[] = array($this, "Error");
 
         return $form;
     }

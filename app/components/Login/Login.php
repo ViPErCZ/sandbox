@@ -107,7 +107,7 @@ class Login extends BaseControl {
 
 		$form->addSubmit('sender', 'Přihlásit se');
 
-		$form->onSuccess[] = callback($this, 'LoginFormSubmitted');
+		$form->onSuccess[] = array($this, 'LoginFormSubmitted');
 
 		return $form;
 	}

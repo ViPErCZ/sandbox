@@ -38,8 +38,8 @@ abstract class BaseForm extends BaseControl {
 	protected function createComponentForm() {
 		$form = new Form();
 
-		$form->onError[] = callback($this, "Error");
-		$form->onSuccess[] = callback($this, "Submit");
+		$form->onError[] = array($this, "Error");
+		$form->onSuccess[] = array($this, "Submit");
 
 		return $form;
 	}

@@ -60,7 +60,7 @@ class RegistrationForm extends BaseControl {
 				->addRule(Form::EQUAL, "Hesla se musí shodovat. Prosím zadejte obě hesla shodná.", $form['password']);
 		$form->addSubmit("sender", "Registrovat se");
 
-		$form->onSuccess[] = callback($this, "Submit");
+		$form->onSuccess[] = array($this, "Submit");
 		$form->addProtection('Vypršel časový limit, odešlete formulář znovu');
 
 		return $form;
