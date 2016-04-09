@@ -64,7 +64,7 @@ class Login extends BaseControl {
 		if (isset($get['code']) && $this->googleClient) {
 			try {
 				$this->user->login("google", $get['code']);
-				$this->notify("Uživatel se úspěšně přihlášil.");
+				$this->notify("Uživatel se úspěšně přihlásil.");
 				$this->getPresenter()->redirect("Homepage:");
 			} catch (AuthenticationException $e) {
 				$this->notify("Uživateli se nepovedlo přihlásit přes službu Google. " . $e->getMessage());
@@ -86,30 +86,6 @@ class Login extends BaseControl {
 		$template->facebookClient = $this->facebookClient;
 
 		$template->render();
-	}
-
-	/** Create Component
-	 * @return Form
-	 */
-	protected function createComponentLoginForm() {
-		$form = new Form();
-		$form->setTranslator($this->translator);
-
-		$form->addText('nick', $this->translator->translate('login_nick_label'))
-			->setEmptyValue('')
-			->setRequired("Prosím zadejte vaše přihlašovací jméno.");
-
-		$form->addPassword('pass', $this->translator->translate('login_pass_label'))
-			->setEmptyValue('')
-			->setRequired("Prosím zadejte vaše přihlašovací heslo.");
-
-		$form->addCheckbox("remember", "Zapamatovat si přihlášení");
-
-		$form->addSubmit('sender', 'Přihlásit se');
-
-		$form->onSuccess[] = array($this, 'LoginFormSubmitted');
-
-		return $form;
 	}
 
 	/**
@@ -134,7 +110,7 @@ class Login extends BaseControl {
 					$this->user->setExpiration('+ 15 minutes', TRUE);
 				// ...a v případě úspěchu presměrujeme na další stránku
 
-				$this->notify("Uživatel se úspěšně přihlášil.");
+				$this->notify("Uživatel se úspěšně přihlásil.");
 				if ($this->getPresenter()->isAjax()) {
 					$json = new \stdClass();
 					$json->isLogin = TRUE;
@@ -157,6 +133,30 @@ class Login extends BaseControl {
 	}
 
 	/**
+	 * @return Form
+	 */
+	protected function createComponentLoginForm() {
+		$form = new Form();
+		$form->setTranslator($this->translator);
+
+		$form->addText('nick', $this->translator->translate('login_nick_label'))
+			->setEmptyValue('')
+			->setRequired("Prosím zadejte vaše přihlašovací jméno.");
+
+		$form->addPassword('pass', $this->translator->translate('login_pass_label'))
+			->setEmptyValue('')
+			->setRequired("Prosím zadejte vaše přihlašovací heslo.");
+
+		$form->addCheckbox("remember", "Zapamatovat si přihlášení");
+
+		$form->addSubmit('sender', 'Přihlásit se');
+
+		$form->onSuccess[] = array($this, 'LoginFormSubmitted');
+
+		return $form;
+	}
+
+	/**
 	 * @return \Kdyby\Facebook\Dialog\LoginDialog
 	 */
 	protected function createComponentFbLogin() {
@@ -173,7 +173,7 @@ class Login extends BaseControl {
 						"firstName" => $me->first_name,
 						"lastName" => $me->last_name)
 					);
-					$this->notify("Uživatel se úspěšně přihlášil.");
+					$this->notify("Uživatel se úspěšně přihlásil.");
 					$this->getPresenter(true)->redirect("Homepage:");
 				} catch (AuthenticationException $e) {
 					$this->notify("Uživateli se nepovedlo přihlásit přes službu Facebook. " . $e->getMessage());
