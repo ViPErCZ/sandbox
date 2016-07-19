@@ -18,14 +18,15 @@ trait TranslatorInjectTrait {
 	public $lang;
 
 	/** @var MyTranslator */
-	protected $translator;
+	public $translator;
 
-	public function injectGettexSetup(MyTranslator $translator) {
-		$this->translator = $translator;
+	public function injectGettexSetup(MyTranslatorFactory $translator) {
+		$this->translator = $translator->create();
 	}
 
 	protected function startup() {
 		parent::startup();
 		$this->lang = $this->translator->setLanguage($this->lang);
+		//$this->translator->setLanguage("cs");
 	}
 }

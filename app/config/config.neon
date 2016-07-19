@@ -33,7 +33,9 @@ application:
 		*: App\*Module\*Presenter
 
 services:
-	- Localization\MyTranslator
+	myTranslator:
+		implement: Localization\MyTranslatorFactory
+		tags: [myTranslator]
 	- App\RouterFactory
 	router: @App\RouterFactory::createRouter
 	componentFactory:

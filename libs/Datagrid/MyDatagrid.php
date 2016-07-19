@@ -24,11 +24,11 @@ class MyDatagrid extends Datagrid {
 		$this->showCheckboxes = $showCheckboxes;
 	}
 
+
 	/**
 	 * @throws \RuntimeException
 	 */
-	public function render()
-	{
+	public function render() {
 		if ($this->filterFormFactory) {
 			$this['form']['filter']->setDefaults($this->filter);
 		}
