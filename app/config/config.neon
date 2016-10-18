@@ -14,7 +14,7 @@ php:
 extensions:
 	gettextLatteExtension: h4kuna\Gettext\DI\GettextLatteExtension
 	console: Kdyby\Console\DI\ConsoleExtension
-	gopay: Markette\Gopay\Extension
+	gopay: Markette\Gopay\DI\Extension
 	facebook: Kdyby\Facebook\DI\FacebookExtension
 	passwordRecovery: Sandbox\PasswordRecovery\DI\PasswordRecoveryExtension
 

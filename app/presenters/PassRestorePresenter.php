@@ -28,7 +28,7 @@ class PassRestorePresenter extends BasePresenter {
 	}
 
 	/**
-	 * @return \Nette\Application\UI\Form
+	 * @return \Sandbox\PasswordRecovery\ResetFormDialog
 	 */
 	protected function createComponentRecovery() {
 		$control = $this->passwordRecovery->createDialog();

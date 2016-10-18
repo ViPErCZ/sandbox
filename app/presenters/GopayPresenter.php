@@ -19,7 +19,7 @@ use Tracy\Debugger;
  */
 class GopayPresenter extends BasePresenter {
 
-	/** @var Gopay\Service @inject */
+	/** @var Gopay\Service\PaymentService @inject */
 	public $gopay;
 
 	/** @var \Model\Gopay\GopayModel @inject */
@@ -31,7 +31,7 @@ class GopayPresenter extends BasePresenter {
 	public function renderDefault() {
 		try {
 			$this->template->channels = $this->gopay->getChannels();
-		} catch (Gopay\GopayFatalException $e) {
+		} catch (Gopay\Exception\GopayFatalException $e) {
 			$this->template->channels = array();
 		}
 	}
@@ -116,17 +116,18 @@ class GopayPresenter extends BasePresenter {
 	 */
 	protected function createComponentForm() {
 		$form = new Form();
-		$this->gopay->bindPaymentButtons($form, array($this->submittedForm));
+		$binder = new Gopay\Form\Binder();
+		$binder->bindPaymentButtons($this->gopay, $form, array([$this, "submittedForm"]));
 
 		return $form;
 	}
 
 	/**
-	 * @param Gopay\PaymentButton $button
+	 * @param Gopay\Form\PaymentButton $button
 	 */
-	public function submittedForm(Gopay\PaymentButton $button) {
-		$this->gopay->successUrl = $this->link('//success');
-		$this->gopay->failureUrl = $this->link('//failure');
+	public function submittedForm(Gopay\Form\PaymentButton $button) {
+		$this->gopay->setSuccessUrl($this->link('//success'));
+		$this->gopay->setFailureUrl($this->link('//failure'));
 		srand((double) microtime() * 1000000);
 
 		$order = array(
@@ -162,7 +163,7 @@ class GopayPresenter extends BasePresenter {
 			//$gopay->denyChannel($gopay::METHOD_TRANSFER);
 			$response = $this->gopay->pay($payment, $button->getChannel(), $storeIdCallback);
 			$this->sendResponse($response);
-		} catch (Gopay\GopayException $e) {
+		} catch (Gopay\Exception\GopayFatalException $e) {
 			echo "<br><br><br>";
 			echo $e->getMessage();
 			echo 'Platební služba Gopay bohužel momentálně nefunguje. Zkuste to prosím za chvíli.';
