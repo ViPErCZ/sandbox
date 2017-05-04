@@ -90,6 +90,23 @@
 
 			$(document).ajaxStart(function() { Pace.restart(); });
 
+			$.nette.ext('icheck', {
+				success: function (payload) {
+					if (payload.snippets !== undefined) {
+						Object.keys(payload.snippets).forEach(function (p1) {
+							if (p1.indexOf("-rows") !== -1 && p1.indexOf("snippet-grid") !== -1) {
+								$('input').iCheck({
+									checkboxClass: 'icheckbox_square-blue',
+									radioClass: 'iradio_square-blue',
+									increaseArea: '20%' // optional
+								});
+								return true;
+							}
+						});
+					}
+				}
+			});
+
 		});
 	</script>
 	{block head}{/block}
